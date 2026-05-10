@@ -1,0 +1,44 @@
+# macOS
+
+.DS_Store
+
+# Xcode
+
+build/
+DerivedData/
+
+# Xcode user data
+
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+
+# Swift Package Manager
+
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods (if you ever use it)
+
+Pods/
+
+# Carthage (if you ever use it)
+
+Carthage/Build/
+
+# Fastlane
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Logs
+
+*.log
+
+# Temporary files
+
+*.swp
+*~.nib
