@@ -23,6 +23,7 @@
 		9CD26B9B2E4C01C20004CB4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26B9A2E4C01BC0004CB4D /* LocationManager.swift */; };
 		9CF1E1022EF5A1B000000002 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF1E1012EF5A1B000000001 /* FirestoreService.swift */; };
 		A00A8D302FB0F01800063EF0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A00A8D2F2FB0F01800063EF0 /* .gitignore */; };
+		A00A8D322FB117CE00063EF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A00A8D312FB117CE00063EF0 /* GoogleService-Info.plist */; };
 		A221029F2E1E1A6200103E28 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A221029E2E1E1A6200103E28 /* GoogleSignIn */; };
 		A22102A12E1E1A6200103E28 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A22102A02E1E1A6200103E28 /* GoogleSignInSwift */; };
 		A22102A32E1E1AC400103E28 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A22102A22E1E1AC400103E28 /* FirebaseStorage */; };
@@ -36,7 +37,6 @@
 		A22102C02E2B0DF100103E28 /* CommunityPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22102B72E2B01B500103E28 /* CommunityPost.swift */; };
 		A22102C12E2B0E3400103E28 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22102AE2E2AF86000103E28 /* FlowLayout.swift */; };
 		A22102C32E2B111D00103E28 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22102C22E2B111800103E28 /* ImagePicker.swift */; };
-		A27B1BC52E4ACC2500D67D57 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A27B1BC42E4ACC2500D67D57 /* GoogleService-Info.plist */; };
 		A27BC4E52E1E158500A03862 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A27BC4E42E1E158500A03862 /* FirebaseAuth */; };
 		A27BC4E72E1E158500A03862 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A27BC4E62E1E158500A03862 /* FirebaseCore */; };
 		A27BC4E92E1E158500A03862 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A27BC4E82E1E158500A03862 /* FirebaseFirestore */; };
@@ -66,6 +66,7 @@
 		9CD26B9A2E4C01BC0004CB4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		9CF1E1012EF5A1B000000001 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		A00A8D2F2FB0F01800063EF0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		A00A8D312FB117CE00063EF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A22102A42E271A9300103E28 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A22102A62E271B3E00103E28 /* EnterProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterProfileView.swift; sourceTree = "<group>"; };
 		A22102AB2E2AF75D00103E28 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -77,7 +78,6 @@
 		A22102B82E2B01CF00103E28 /* CommunityPostRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPostRow.swift; sourceTree = "<group>"; };
 		A22102C22E2B111800103E28 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		A22102C42E2B121800103E28 /* PawPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A27B1BC42E4ACC2500D67D57 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A28CBC632EE66F6C00734192 /* LostPetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostPetRow.swift; sourceTree = "<group>"; };
 		A29478C32ED4405E00B94BE7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		A29478C42ED4405E00B94BE7 /* PawPalLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PawPalLogo.swift; sourceTree = "<group>"; };
@@ -166,6 +166,7 @@
 				A22102BA2E2B053300103E28 /* Services */,
 				9BC1BC362CBAE8C600F1DD8E /* Views */,
 				A22102BB2E2B057A00103E28 /* Resources */,
+				A00A8D312FB117CE00063EF0 /* GoogleService-Info.plist */,
 			);
 			path = PawPal;
 			sourceTree = "<group>";
@@ -197,7 +198,6 @@
 			children = (
 				9BC1BC2F2CBAE7E300F1DD8E /* Info.plist */,
 				9BC1BC2A2CBAE7E300F1DD8E /* Assets.xcassets */,
-				A27B1BC42E4ACC2500D67D57 /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -296,8 +296,8 @@
 			files = (
 				A2FD3C5B2EE66A5E000DFCEF /* Community.storyboard in Resources */,
 				9BC1BC2B2CBAE7E300F1DD8E /* Assets.xcassets in Resources */,
+				A00A8D322FB117CE00063EF0 /* GoogleService-Info.plist in Resources */,
 				A00A8D302FB0F01800063EF0 /* .gitignore in Resources */,
-				A27B1BC52E4ACC2500D67D57 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
