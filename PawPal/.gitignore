@@ -13,6 +13,10 @@ DerivedData/
 *.xcodeproj/xcuserdata/
 *.xcuserstate
 
+# Google Firebase
+
+GoogleService-Info.plist
+
 # Swift Package Manager
 
 .build/
