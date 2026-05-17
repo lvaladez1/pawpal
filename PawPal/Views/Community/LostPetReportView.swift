@@ -38,6 +38,10 @@ struct LostPetReportView: View {
     @EnvironmentObject var authVM: AuthViewModel
     @State private var petName = ""
     @State private var petDescription = ""
+    @State private var petPrimaryColor = ""
+    @State private var petSecondaryColor = ""
+    let petPrimaryColorDropDown: [String] = ["black", "white", "brown"]
+    let petSecondaryColorDropDown: [String] = ["none", "black", "white", "brown"]
     @State private var pinCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var searchQuery = ""
@@ -84,6 +88,58 @@ struct LostPetReportView: View {
                             
                             TextField("e.g. Bella", text: $petName)
                                 .padding()
+                                .background(Color.white)
+                                .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        // Pet Primary Color Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Primary Color")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Picker(selection: $petPrimaryColor) {
+                                Text("Select a color")
+                                    .tag("")
+
+                                    ForEach(petPrimaryColorDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
+                                    }
+                            }   label: {
+                                    Text(petPrimaryColor.isEmpty ? "Select a color" : petPrimaryColor.capitalized)
+                                }
+                                .pickerStyle(.menu)
+                                .tint(petPrimaryColor.isEmpty ? .gray : .primary)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color.white)
+                                .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        // Pet Secondary Color Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Secondary Color")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Picker(selection: $petSecondaryColor) {
+                                Text("Select a color")
+                                    .tag("")
+
+                                    ForEach(petSecondaryColorDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
+                                    }
+                            }   label: {
+                                    Text(petSecondaryColor.isEmpty ? "Select a color" : petSecondaryColor.capitalized)
+                                }
+                                .pickerStyle(.menu)
+                                .tint(petSecondaryColor.isEmpty ? .gray : .primary)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(Color.white)
                                 .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
