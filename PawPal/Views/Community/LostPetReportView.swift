@@ -307,6 +307,8 @@ struct LostPetReportView: View {
         let data: [String: Any] = [
             FS.LostPets.petName: petName,
             FS.LostPets.description: petDescription,
+            "primaryColor": petPrimaryColor,
+            "secondaryColor": petSecondaryColor,
             FS.LostPets.lat: pinCoordinate.latitude,
             FS.LostPets.lng: pinCoordinate.longitude,
             FS.LostPets.timestamp: FieldValue.serverTimestamp(),
@@ -325,6 +327,8 @@ struct LostPetReportView: View {
                     alertMessage = "Lost pet report submitted successfully."
                     showAlert = true
                     petName = ""
+                    petPrimaryColor = ""
+                    petSecondaryColor = ""
                     petDescription = ""
                     hasManuallySelectedLocation = false
                 }
