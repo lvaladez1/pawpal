@@ -156,7 +156,22 @@ struct LostPetDetailView: View {
                             .cornerRadius(12)
                             .shadow(color: Color.theme.babyBlue.opacity(0.4), radius: 8, x: 0, y: 4)
                         }
-                        
+                        // Sighting Button
+                        NavigationLink(destination: AddSightingView(pet: pet)) {
+                            HStack {
+                                Image(systemName: "binoculars.fill")
+                                
+                                Text("Report Sighting")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.theme.babyBlue)
+                            .cornerRadius(12)
+                            .shadow(color: Color.theme.babyBlue.opacity(0.4), radius: 8, x: 0, y: 4)
+                        }
+                        // Share Report Button
                         Button(action: {
                             showShareSheet = true
                         }) {

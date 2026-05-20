@@ -25,6 +25,7 @@
 		9CD26B9B2E4C01C20004CB4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26B9A2E4C01BC0004CB4D /* LocationManager.swift */; };
 		9CF1E1022EF5A1B000000002 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF1E1012EF5A1B000000001 /* FirestoreService.swift */; };
 		A00A8D302FB0F01800063EF0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A00A8D2F2FB0F01800063EF0 /* .gitignore */; };
+		A0D4291E2FBD0AFF008C6F2A /* AddSightingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4291D2FBD0AFF008C6F2A /* AddSightingView.swift */; };
 		A221029F2E1E1A6200103E28 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A221029E2E1E1A6200103E28 /* GoogleSignIn */; };
 		A22102A12E1E1A6200103E28 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A22102A02E1E1A6200103E28 /* GoogleSignInSwift */; };
 		A22102A32E1E1AC400103E28 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A22102A22E1E1AC400103E28 /* FirebaseStorage */; };
@@ -69,6 +70,7 @@
 		9CD26B9A2E4C01BC0004CB4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		9CF1E1012EF5A1B000000001 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		A00A8D2F2FB0F01800063EF0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		A0D4291D2FBD0AFF008C6F2A /* AddSightingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSightingView.swift; sourceTree = "<group>"; };
 		A22102A42E271A9300103E28 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A22102A62E271B3E00103E28 /* EnterProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterProfileView.swift; sourceTree = "<group>"; };
 		A22102AB2E2AF75D00103E28 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		9B9720942CFD096400AED15E /* Community */ = {
 			isa = PBXGroup;
 			children = (
+				A0D4291D2FBD0AFF008C6F2A /* AddSightingView.swift */,
 				A28CBC632EE66F6C00734192 /* LostPetRow.swift */,
 				A2FD3C5A2EE66A5E000DFCEF /* Community.storyboard */,
 				84C67EE62EDA215300870058 /* UserProfileView.swift */,
@@ -315,6 +318,7 @@
 				A22102BF2E2B0D8800103E28 /* CommunityPostRow.swift in Sources */,
 				84C67EE72EDA215300870058 /* UserProfileView.swift in Sources */,
 				9CD26B9B2E4C01C20004CB4D /* LocationManager.swift in Sources */,
+				A0D4291E2FBD0AFF008C6F2A /* AddSightingView.swift in Sources */,
 				9BC1BC222CBAE7E200F1DD8E /* AppDelegate.swift in Sources */,
 				9C90A8E72E597E9A0063C4BC /* LostPetDetailView.swift in Sources */,
 				A22102B22E2AFA5200103E28 /* RegisterView.swift in Sources */,
