@@ -21,6 +21,7 @@ struct AddSightingView: View {
     @State private var collarSeen = "Unknown"
     @State private var contactInfo = ""
     @State private var isSubmitting = false
+    @StateObject private var locationManager = LocationManager()
 
     let conditionOptions = ["Unknown", "Healthy", "Injured", "Limping", "Dirty/Wet", "Very thin"]
     let directionOptions = ["Unknown", "North", "South", "East", "West", "Stayed nearby"]
@@ -57,7 +58,13 @@ struct AddSightingView: View {
                             )
 
                         Button {
-                            // Add current location logic here FIX ME
+                            locationManager.requestLocationPermission()
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                if !locationManager.addressString.isEmpty {
+                                    locationNotes = locationManager.addressString
+                                }
+                            }
                         } label: {
                             HStack {
                                 Image(systemName: "location.fill")
@@ -65,10 +72,16 @@ struct AddSightingView: View {
                                 Text("Use My Current Location")
                                     .fontWeight(.semibold)
                             }
+                            .foregroundColor(Color.theme.babyBlue)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.theme.babyBlue.opacity(0.15))
+                            .background(Color.white)
                             .cornerRadius(12)
+                            
+                            // .frame(maxWidth: .infinity)
+                            //.padding()
+                            //.background(Color.theme.babyBlue.opacity(0.15))
+                            //.cornerRadius(12)
                         }
                     }
 
@@ -143,6 +156,7 @@ struct AddSightingView: View {
                 .padding(20)
             }
         }
+        
         .navigationTitle("Report Sighting")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -199,6 +213,8 @@ struct AddSightingView: View {
             "contactInfo": contactInfo,
             "lostPetLatitude": pet.latitude,
             "lostPetLongitude": pet.longitude,
+            "latitude": locationManager.location?.coordinate.latitude ?? 0,
+            "longitude": locationManager.location?.coordinate.longitude ?? 0,
             "createdAt": Timestamp(date: Date())
         ]
 
