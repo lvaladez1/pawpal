@@ -43,15 +43,16 @@ struct LostPetReportView: View {
     let petPrimaryColorDropDown: [String] = ["black", "white", "brown"]
     let petSecondaryColorDropDown: [String] = ["none", "black", "white", "brown"]
     @State private var pinCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    @State private var showLocationSuggestions = false
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var searchQuery = ""
     @State private var searchCompleter = MKLocalSearchCompleter()
     @State private var hasManuallySelectedLocation = false
-
+    
     @State private var alertMessage: String = ""
     @State private var showAlert: Bool = false
     @State private var isSubmitting: Bool = false
-
+    
     var body: some View {
         ZStack {
             // Background Color
@@ -77,7 +78,7 @@ struct LostPetReportView: View {
                             .multilineTextAlignment(.center)
                     }
                     .padding(.top, 10)
-
+                    
                     // Form Section
                     VStack(spacing: 20) {
                         // Pet Name Input
@@ -102,21 +103,21 @@ struct LostPetReportView: View {
                             Picker(selection: $petPrimaryColor) {
                                 Text("Select a color")
                                     .tag("")
-
-                                    ForEach(petPrimaryColorDropDown, id: \.self) { color in
+                                
+                                ForEach(petPrimaryColorDropDown, id: \.self) { color in
                                     Text(color.capitalized)
                                         .tag(color)
-                                    }
-                            }   label: {
-                                    Text(petPrimaryColor.isEmpty ? "Select a color" : petPrimaryColor.capitalized)
                                 }
-                                .pickerStyle(.menu)
-                                .tint(petPrimaryColor.isEmpty ? .gray : .primary)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.white)
-                                .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            }   label: {
+                                Text(petPrimaryColor.isEmpty ? "Select a color" : petPrimaryColor.capitalized)
+                            }
+                            .pickerStyle(.menu)
+                            .tint(petPrimaryColor.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
                         // Pet Secondary Color Input
@@ -128,23 +129,23 @@ struct LostPetReportView: View {
                             Picker(selection: $petSecondaryColor) {
                                 Text("Select a color")
                                     .tag("")
-
-                                    ForEach(petSecondaryColorDropDown, id: \.self) { color in
+                                
+                                ForEach(petSecondaryColorDropDown, id: \.self) { color in
                                     Text(color.capitalized)
                                         .tag(color)
-                                    }
-                            }   label: {
-                                    Text(petSecondaryColor.isEmpty ? "Select a color" : petSecondaryColor.capitalized)
                                 }
-                                .pickerStyle(.menu)
-                                .tint(petSecondaryColor.isEmpty ? .gray : .primary)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.white)
-                                .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            }   label: {
+                                Text(petSecondaryColor.isEmpty ? "Select a color" : petSecondaryColor.capitalized)
+                            }
+                            .pickerStyle(.menu)
+                            .tint(petSecondaryColor.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
-
+                        
                         // Description Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Description")
@@ -171,7 +172,12 @@ struct LostPetReportView: View {
                                 .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                                 .onChange(of: searchQuery) { newValue in
-                                    print("🔤 User typed: \(newValue)")
+                                    if hasManuallySelectedLocation {
+                                        hasManuallySelectedLocation = false
+                                        return
+                                    }
+                                    
+                                    showLocationSuggestions = !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                                     searchCompleter.queryFragment = newValue
                                 }
                                 .onAppear {
@@ -180,8 +186,8 @@ struct LostPetReportView: View {
                                     searchCompleter.resultTypes = .address
                                 }
                         }
-
-                        if !completerDelegateWrapper.results.isEmpty {
+                        
+                        if showLocationSuggestions && !completerDelegateWrapper.results.isEmpty {
                             VStack(alignment: .leading, spacing: 0) {
                                 ForEach(completerDelegateWrapper.results) { result in
                                     VStack(alignment: .leading) {
@@ -208,7 +214,7 @@ struct LostPetReportView: View {
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                         }
-
+                        
                         // Map View
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
@@ -248,7 +254,7 @@ struct LostPetReportView: View {
                         }
                     }
                     .padding(.horizontal)
-
+                    
                     // Submit Button
                     Button(action: submitLostPetReport) {
                         HStack {
@@ -284,11 +290,11 @@ struct LostPetReportView: View {
             )
         }
     }
-
+    
     private func submitLostPetReport() {
         let lat = pinCoordinate.latitude
         let lon = pinCoordinate.longitude
-
+        
         guard Validators.isValidPetName(petName) else {
             alertMessage = "Please enter a valid pet name (2–40 characters)."
             showAlert = true; return
@@ -301,7 +307,7 @@ struct LostPetReportView: View {
             alertMessage = "Please select a valid location on the map."
             showAlert = true; return
         }
-
+        
         isSubmitting = true
         
         let data: [String: Any] = [
@@ -316,7 +322,7 @@ struct LostPetReportView: View {
             // Attempt to connect reports with user ID, Also accounts for old reports not having userId attac
             "userId": authVM.user?.uid ?? ""
         ]
-
+        
         Firestore.firestore().collection(FS.LostPets.collection).addDocument(data: data) { error in
             DispatchQueue.main.async {
                 isSubmitting = false
@@ -335,7 +341,7 @@ struct LostPetReportView: View {
             }
         }
     }
-
+    
     private func setCameraAndPin(to coord: CLLocationCoordinate2D) {
         pinCoordinate = coord
         cameraPosition = .region(
@@ -345,21 +351,21 @@ struct LostPetReportView: View {
     }
     private func selectSearchCompletion(_ completion: MKLocalSearchCompletion) {
         hasManuallySelectedLocation = true
-
+        showLocationSuggestions = false
+        completerDelegateWrapper.results = []
+        UIApplication.shared.endEditing()
+        
         let request = MKLocalSearch.Request(completion: completion)
         let search = MKLocalSearch(request: request)
-
+        
         search.start { response, error in
-            if let coordinate = response?.mapItems.first?.placemark.coordinate {
-                setCameraAndPin(to: coordinate)
-                searchQuery = completion.title
-
-                // Delay hiding suggestions to fix render glitch
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    completerDelegateWrapper.results = []
+            DispatchQueue.main.async {
+                if let coordinate = response?.mapItems.first?.placemark.coordinate {
+                    setCameraAndPin(to: coordinate)
+                    searchQuery = completion.title
+                } else {
+                    print("❌ Could not resolve selected location")
                 }
-            } else {
-                print("❌ Could not resolve selected location")
             }
         }
     }
