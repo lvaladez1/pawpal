@@ -40,8 +40,10 @@ struct LostPetReportView: View {
     @State private var petDescription = ""
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
+    @State private var hasMicrochip = ""
     let petPrimaryColorDropDown: [String] = ["black", "white", "brown"]
     let petSecondaryColorDropDown: [String] = ["none", "black", "white", "brown"]
+    let hasMicrochipDropdown: [String] = ["No", "Yes", "Unknown"]
     @State private var pinCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @State private var showLocationSuggestions = false
     @State private var cameraPosition: MapCameraPosition = .automatic
@@ -139,6 +141,32 @@ struct LostPetReportView: View {
                             }
                             .pickerStyle(.menu)
                             .tint(petSecondaryColor.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        // Pet Has Microchip Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Microchipped?")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Picker(selection: $hasMicrochip) {
+                                Text("Is your pet microchipped?")
+                                    .tag("")
+                                
+                                ForEach(hasMicrochipDropdown, id: \.self) { option in
+                                    Text(option)
+                                        .tag(option)
+                                }
+                            }   label: {
+                                Text(hasMicrochip.isEmpty ? "Is your pet microchipped?" : hasMicrochip)
+                            }
+                            .pickerStyle(.menu)
+                            .tint(hasMicrochip.isEmpty ? .gray : .primary)
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.white)
@@ -315,6 +343,7 @@ struct LostPetReportView: View {
             FS.LostPets.description: petDescription,
             "primaryColor": petPrimaryColor,
             "secondaryColor": petSecondaryColor,
+            "hasMicrochip" : hasMicrochip,
             FS.LostPets.lat: pinCoordinate.latitude,
             FS.LostPets.lng: pinCoordinate.longitude,
             FS.LostPets.timestamp: FieldValue.serverTimestamp(),
