@@ -2,6 +2,14 @@
 //  AddSightingView.swift
 //  PawPal
 //
+//  Allows a user to report a possible sighting for a lost pet.
+//  The sighting includes location, travel direction, behavior,
+//  condition, visual identifiers, and optional contact information.
+//
+//  The submitted report is saved to Firestore and includes a
+//  match score compared to the pet's original lost pet report.
+//
+//
 //  Created by Luis V on 5/19/26.
 //
 
@@ -11,10 +19,13 @@ import CoreLocation
 import MapKit
 
 struct AddSightingView: View {
+    // Lost pet this sighting is being reported for.
+    // Used to associate the sighting with the pet and calculate match distance.
     let pet: LostPet
     
     @Environment(\.dismiss) private var dismiss
     
+    // Handles user's current GPS location.
     @StateObject private var locationManager = LocationManager()
     @StateObject private var completerDelegateWrapper = CompleterDelegateWrapper()
     
@@ -26,6 +37,7 @@ struct AddSightingView: View {
     
     @State private var petCondition = "Unknown"
     @State private var directionTraveled = "Unknown"
+    @State private var petGender = "Unknown"
     @State private var behavior = "Unknown"
     @State private var tailShape = "Unknown"
     @State private var earsPosition = "Unknown"
@@ -38,6 +50,7 @@ struct AddSightingView: View {
     
     let conditionOptions = ["Unknown", "Healthy", "Injured", "Limping", "Dirty/Wet", "Very thin"]
     let directionOptions = ["Unknown", "North", "South", "East", "West", "Stayed nearby"]
+    let genderOptions = ["Unknown", "Male", "Female"]
     let behaviorOptions = ["Unknown", "Running", "Hiding", "Friendly", "Scared", "Aggressive"]
     let tailShapeOptions = ["Unknown", "Straight", "Upright", "Curled", "Curled over back", "Busy / Fluffy", "Short / Bobtail", "Tucked", "Down / Hanging"]
     let earsPositionOptions = ["Unknown", "Upright / Pointed", "Semi-erect", "Floppy", "Folded", "Pulled back", "Flattened", "Cropped"]
@@ -143,12 +156,6 @@ struct AddSightingView: View {
                     VStack(alignment: .leading, spacing: 20) {
                         
                         sightingPicker(
-                            title: "Pet Condition",
-                            selection: $petCondition,
-                            options: conditionOptions
-                        )
-                        
-                        sightingPicker(
                             title: "Direction Traveling",
                             selection: $directionTraveled,
                             options: directionOptions
@@ -158,6 +165,18 @@ struct AddSightingView: View {
                             title: "Pet's Behavior",
                             selection: $behavior,
                             options: behaviorOptions
+                        )
+                        
+                        sightingPicker(
+                            title: "Pet Condition",
+                            selection: $petCondition,
+                            options: conditionOptions
+                        )
+                        
+                        sightingPicker(
+                            title: "Gender",
+                            selection: $petGender,
+                            options: genderOptions,
                         )
                         
                         sightingPicker(
@@ -233,6 +252,8 @@ struct AddSightingView: View {
         }
     }
     
+    // Reusable menu picker used for all sighting attributes.
+    // This keeps the form visually consistent and avoids duplicate picker styling.
     private func sightingPicker(
         title: String,
         selection: Binding<String>,
@@ -297,9 +318,10 @@ struct AddSightingView: View {
             "locationNotes": searchQuery,
             "latitude": latitude,
             "longitude": longitude,
-            "petCondition": petCondition,
             "directionTraveled": directionTraveled,
             "behavior": behavior,
+            "petCondition": petCondition,
+            "petGender": petGender,
             "tailShape": tailShape,
             "earsPosition": earsPosition,
             "collarSeen": collarSeen,
@@ -353,6 +375,7 @@ struct AddSightingView: View {
         }
     }
     
+    // Calculates distance between the original lost-pet location and the sighting.
     private func calculateDistanceMiles(
         fromLat: Double,
         fromLng: Double,
@@ -364,6 +387,8 @@ struct AddSightingView: View {
         return from.distance(from: to) / 1609.34
     }
     
+    // Basic distance-based confidence score.
+    // Future versions could include photo matching.
     private func matchScore(distanceMiles: Double) -> Int {
         switch distanceMiles {
         case 0...0.5:
@@ -379,6 +404,7 @@ struct AddSightingView: View {
         }
     }
     
+    // Converts numberic score into a human-readable category confidence level.
     private func matchLevel(score: Int) -> String {
         if score >= 80 {
             return "strong"

@@ -91,6 +91,7 @@ struct LostPetsView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 
+                // Content
                 } else {
                     if viewMode == .list {
                         ScrollView {
@@ -100,7 +101,7 @@ struct LostPetsView: View {
                                         LostPetRow(pet: pet)
                                     }
                                     .frame(maxWidth: .infinity)
-                                    .frame(height: 140)
+
                                     .background(Color.white)
                                     .cornerRadius(16)
                                     .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
@@ -178,6 +179,8 @@ struct LostPetsView: View {
                         }
 
                         let timestamp = (data[FS.LostPets.timestamp] as? Timestamp)?.dateValue()
+                        
+                        let userId = data[FS.LostPets.userId] as? String
 
                         return LostPet(
                             id: doc.documentID,
@@ -185,7 +188,13 @@ struct LostPetsView: View {
                             description: desc,
                             latitude: lat,
                             longitude: lng,
-                            timestamp: timestamp
+                            timestamp: timestamp,
+                            userId: userId,
+                            petGender: data[FS.LostPets.petGender] as? String,
+                            primaryColor: data[FS.LostPets.primaryColor] as? String,
+                            secondaryColor: data[FS.LostPets.secondaryColor] as? String,
+                            hasMicrochip: data[FS.LostPets.hasMicrochip] as? String
+
                         )
                     }
                 }

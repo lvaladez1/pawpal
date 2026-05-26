@@ -4,6 +4,9 @@
 //
 //  Created by Juan Zavala on 8/05/25.
 //
+//  Contributors:
+//  Luis Valadez last updated on 5/20/26.
+//
 
 import Foundation
 import CoreLocation
