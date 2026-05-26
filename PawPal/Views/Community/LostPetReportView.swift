@@ -37,6 +37,7 @@ struct LostPetReportView: View {
     @StateObject private var completerDelegateWrapper = CompleterDelegateWrapper()
     @EnvironmentObject var authVM: AuthViewModel
     @State private var petName = ""
+    @State private var petGender = ""
     @State private var petDescription = ""
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
@@ -94,6 +95,43 @@ struct LostPetReportView: View {
                                 .background(Color.white)
                                 .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        // Pet Gender Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Gender")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+
+                            HStack(spacing: 12) {
+                                Button(action: {
+                                    petGender = "Male"
+                                }) {
+                                    Text("Male")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(petGender == "Male" ? Color.theme.babyBlue : Color.white)
+                                        .foregroundColor(petGender == "Male" ? .white : .primary)
+                                        .cornerRadius(12)
+                                        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                                }
+
+                                Button(action: {
+                                    petGender = "Female"
+                                }) {
+                                    Text("Female")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(petGender == "Female" ? Color.theme.babyBlue : Color.white)
+                                        .foregroundColor(petGender == "Female" ? .white : .primary)
+                                        .cornerRadius(12)
+                                        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                                }
+                            }
                         }
                         
                         // Pet Primary Color Input
@@ -341,6 +379,7 @@ struct LostPetReportView: View {
         let data: [String: Any] = [
             FS.LostPets.petName: petName,
             FS.LostPets.description: petDescription,
+            "petGender": petGender,
             "primaryColor": petPrimaryColor,
             "secondaryColor": petSecondaryColor,
             "hasMicrochip" : hasMicrochip,
@@ -362,8 +401,10 @@ struct LostPetReportView: View {
                     alertMessage = "Lost pet report submitted successfully."
                     showAlert = true
                     petName = ""
+                    petGender = ""
                     petPrimaryColor = ""
                     petSecondaryColor = ""
+                    hasMicrochip = ""
                     petDescription = ""
                     hasManuallySelectedLocation = false
                 }
