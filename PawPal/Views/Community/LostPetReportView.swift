@@ -38,7 +38,7 @@ struct LostPetReportView: View {
     @EnvironmentObject var authVM: AuthViewModel
     @State private var petName = ""
     @State private var petGender = ""
-    @State private var petDescription = ""
+    @State private var petNotes = ""
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
     @State private var hasMicrochip = ""
@@ -212,13 +212,13 @@ struct LostPetReportView: View {
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        // Description Input
+                        // Notes Input
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Description")
+                            Text("Notes")
                                 .font(.headline)
                                 .foregroundColor(.primary)
                             
-                            TextField("Breed, color, collar, distinct marks...", text: $petDescription, axis: .vertical)
+                            TextField("Distinct markings, personality, or other helpful notes...", text: $petNotes, axis: .vertical)
                                 .lineLimit(3...6)
                                 .padding()
                                 .background(Color.white)
@@ -365,8 +365,8 @@ struct LostPetReportView: View {
             alertMessage = "Please enter a valid pet name (2–40 characters)."
             showAlert = true; return
         }
-        guard Validators.isValidDescription(petDescription) else {
-            alertMessage = "Please enter a valid description (10–500 characters)."
+        guard Validators.isValidDescription(petNotes) else {
+            alertMessage = "Please enter valid notes (10–500 characters)."
             showAlert = true; return
         }
         guard Validators.isValidCoordinate(lat: lat, lon: lon) else {
@@ -378,7 +378,7 @@ struct LostPetReportView: View {
         
         let data: [String: Any] = [
             FS.LostPets.petName: petName,
-            FS.LostPets.description: petDescription,
+            FS.LostPets.description: petNotes,
             "petGender": petGender,
             "primaryColor": petPrimaryColor,
             "secondaryColor": petSecondaryColor,
@@ -405,7 +405,7 @@ struct LostPetReportView: View {
                     petPrimaryColor = ""
                     petSecondaryColor = ""
                     hasMicrochip = ""
-                    petDescription = ""
+                    petNotes = ""
                     hasManuallySelectedLocation = false
                 }
             }
