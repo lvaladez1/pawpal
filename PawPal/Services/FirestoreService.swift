@@ -35,7 +35,7 @@ class FirestoreService {
                     else { return nil }
                     
                     let timestamp = (data[FS.LostPets.timestamp] as? Timestamp)?.dateValue()
-                    let userId = data["userId"] as? String
+                    let userId = data[FS.LostPets.userId] as? String
                     
                     return LostPet(
                         id: doc.documentID,
@@ -44,7 +44,11 @@ class FirestoreService {
                         latitude: lat,
                         longitude: lng,
                         timestamp: timestamp,
-                        userId: userId
+                        userId: userId,
+                        petGender: data[FS.LostPets.petGender] as? String,
+                        primaryColor: data[FS.LostPets.primaryColor] as? String,
+                        secondaryColor: data[FS.LostPets.secondaryColor] as? String,
+                        hasMicrochip: data[FS.LostPets.hasMicrochip] as? String
                     )
                 } ?? []
                 
@@ -54,7 +58,7 @@ class FirestoreService {
     
     func fetchUserLostPets(userId: String, completion: @escaping (Result<[LostPet], Error>) -> Void) {
         db.collection(FS.LostPets.collection)
-            .whereField("userId", isEqualTo: userId)
+            .whereField(FS.LostPets.userId, isEqualTo: userId)
             .order(by: FS.LostPets.timestamp, descending: true)
             .getDocuments { snapshot, error in
                 if let error = error {
@@ -71,7 +75,11 @@ class FirestoreService {
                         latitude: data[FS.LostPets.lat] as? Double ?? 0,
                         longitude: data[FS.LostPets.lng] as? Double ?? 0,
                         timestamp: (data[FS.LostPets.timestamp] as? Timestamp)?.dateValue(),
-                        userId: data["userId"] as? String
+                        userId: data[FS.LostPets.userId] as? String,
+                        petGender: data[FS.LostPets.petGender] as? String,
+                        primaryColor: data[FS.LostPets.primaryColor] as? String,
+                        secondaryColor: data[FS.LostPets.secondaryColor] as? String,
+                        hasMicrochip: data[FS.LostPets.hasMicrochip] as? String
                     )
                 } ?? []
                 
@@ -86,7 +94,7 @@ class FirestoreService {
             FS.LostPets.lat: latitude,
             FS.LostPets.lng: longitude,
             FS.LostPets.timestamp: FieldValue.serverTimestamp(),
-            "userId": userId
+            FS.LostPets.userId: userId
         ]
         
         db.collection(FS.LostPets.collection).addDocument(data: data) { error in

@@ -64,6 +64,13 @@ struct MainTabView: View {
                 Label("Report", systemImage: "plus.circle")
             }
             
+            NavigationStack {
+                SightingsView()
+            }
+            .tabItem {
+                Label("Sightings", systemImage: "binoculars.fill")
+            }
+            
             NavigationStack{
                 UserProfileView()
             }.tabItem {
