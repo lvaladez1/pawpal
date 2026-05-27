@@ -37,6 +37,11 @@ struct LostPetReportView: View {
     @StateObject private var completerDelegateWrapper = CompleterDelegateWrapper()
     @EnvironmentObject var authVM: AuthViewModel
     @State private var petName = ""
+    @State private var primaryBreed: String = ""
+    @State private var breeds: [String] = []
+    @State private var secondaryBreed = ""
+    @State private var secondaryBreeds: [String] = []
+    @State private var isWearingCollar: String = ""
     @State private var petDescription = ""
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
@@ -93,6 +98,56 @@ struct LostPetReportView: View {
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
+                        // Primary Breed Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Breed")
+                                .font(.headline)
+
+                            Picker(
+                                selection: $primaryBreed,
+                                label: Text(primaryBreed.isEmpty ? "Select a breed" : primaryBreed.capitalized)
+                            ) {
+                                Text("Select a breed").tag("")
+
+                                ForEach(breeds, id: \.self) { breed in
+                                    Text(breed.capitalized)
+                                        .tag(breed)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(primaryBreed.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.05), radius: 2)
+                        }
+                        
+                        // Secondary Breed Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Secondary Breed (optional mix)")
+                                .font(.headline)
+
+                            Picker(
+                                selection: $secondaryBreed,
+                                label: Text(secondaryBreed.isEmpty ? "No mix" : secondaryBreed.capitalized)
+                            ) {
+                                Text("No mix").tag("")
+
+                                ForEach(breeds, id: \.self) { breed in
+                                    Text(breed.capitalized)
+                                        .tag(breed)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(primaryBreed.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.05), radius: 2)
+                        }
+                        
                         // Pet Primary Color Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Primary Color")
@@ -143,6 +198,29 @@ struct LostPetReportView: View {
                                 .background(Color.white)
                                 .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        //Has Collar Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Is the pet wearing a collar?")
+                                .font(.headline)
+
+                            Picker(
+                                selection: $isWearingCollar,
+                                label: Text(isWearingCollar.isEmpty ? "Select Yes or No" : isWearingCollar)
+                            ) {
+                                Text("Select Yes or No").tag("")
+
+                                Text("Yes").tag("Yes")
+                                Text("No").tag("No")
+                            }
+                            .pickerStyle(.menu)
+                            .tint(.gray)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.05), radius: 2)
                         }
 
                         // Description Input
@@ -273,6 +351,9 @@ struct LostPetReportView: View {
                     .padding(.bottom, 30)
                 }
             }
+            .onAppear {
+                fetchBreeds()
+            }
         }
         .navigationTitle("Report Lost Pet")
         .navigationBarTitleDisplayMode(.inline)
@@ -334,6 +415,46 @@ struct LostPetReportView: View {
                 }
             }
         }
+    }
+    
+    func fetchBreeds() {
+        guard let url = URL(string: "https://dog.ceo/api/breeds/list/all") else { return }
+
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            if let error = error {
+                print("Network error:", error)
+                return
+            }
+
+            guard let data = data else {
+                print("No data")
+                return
+            }
+
+            do {
+                let decoded = try JSONDecoder().decode(BreedsResponse.self, from: data)
+
+                var list: [String] = []
+
+                for (breed, subBreeds) in decoded.message {
+                    if subBreeds.isEmpty {
+                        list.append(breed)
+                    } else {
+                        for sub in subBreeds {
+                            list.append("\(sub) \(breed)")
+                        }
+                    }
+                }
+
+                DispatchQueue.main.async {
+                    self.breeds = list.sorted()
+                    print("Loaded breeds:", self.breeds.count)
+                }
+
+            } catch {
+                print("Decode error:", error)
+            }
+        }.resume()
     }
 
     private func setCameraAndPin(to coord: CLLocationCoordinate2D) {
