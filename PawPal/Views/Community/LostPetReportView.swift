@@ -132,13 +132,13 @@ struct LostPetReportView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Secondary Breed (optional mix)")
                                 .font(.headline)
-
+                            
                             Picker(
                                 selection: $secondaryBreed,
                                 label: Text(secondaryBreed.isEmpty ? "No mix" : secondaryBreed.capitalized)
                             ) {
                                 Text("No mix").tag("")
-
+                                
                                 ForEach(breeds, id: \.self) { breed in
                                     Text(breed.capitalized)
                                         .tag(breed)
@@ -151,6 +151,8 @@ struct LostPetReportView: View {
                             .background(Color.white)
                             .cornerRadius(12)
                             .shadow(color: .black.opacity(0.05), radius: 2)
+                        }
+                        
                         // Pet Gender Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Gender")
@@ -457,6 +459,7 @@ struct LostPetReportView: View {
         
         isSubmitting = true
         
+        // Create Firestore document for the lost pet report collection.
         let data: [String: Any] = [
             FS.LostPets.petName: petName,
             FS.LostPets.description: petNotes,
