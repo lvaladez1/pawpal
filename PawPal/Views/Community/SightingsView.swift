@@ -404,7 +404,6 @@ struct SightingsView: View {
             detailItem("Color", sighting.primaryColor)
             detailItem("Condition", sighting.petCondition)
             detailItem("Behavior", sighting.behavior)
-            detailItem("Collar Seen", sighting.collarSeen)
             detailItem("Tail Shape", sighting.tailType)
             detailItem("Ears Position", sighting.earType)
 
@@ -458,6 +457,7 @@ struct SightingsView: View {
         }
     }
 
+    // MARK: Confience Level, Card
     private func confidenceColor(_ confidence: String) -> Color {
         switch confidence {
         case "Strong":
@@ -627,8 +627,13 @@ struct SightingsView: View {
             .indigo
         ]
 
-        let index = abs(pet.id.hashValue) % colors.count
-        return colors[index]
+        let visiblePets = localMissingPets.isEmpty ? missingPets : localMissingPets
+
+        guard let index = visiblePets.firstIndex(where: { $0.id == pet.id }) else {
+            return .gray
+        }
+
+        return colors[index % colors.count]
     }
 
     // MARK: Match Building
@@ -650,14 +655,13 @@ struct SightingsView: View {
         pet: MissingPetReport
     ) -> Int {
         var score = 0
-
-        if matches(sighting.size, pet.size) { score += 20 }
-        if matches(sighting.primaryColor, pet.primaryColor) { score += 25 }
+        // MARK: Change Scoring Here
+        if matches(sighting.size, pet.size) { score += 20}
+        if matches(sighting.primaryColor, pet.primaryColor) { score += 30 }
         if matches(sighting.markings, pet.markings) { score += 20 }
         if matches(sighting.coatLength, pet.coatLength) { score += 10 }
         if matches(sighting.earType, pet.earType) { score += 10 }
         if matches(sighting.tailType, pet.tailType) { score += 10 }
-        if matches(sighting.collarSeen, pet.collarSeen) { score += 5 }
 
         return score
     }
