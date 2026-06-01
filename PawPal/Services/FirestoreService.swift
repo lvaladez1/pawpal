@@ -40,15 +40,18 @@ class FirestoreService {
                     return LostPet(
                         id: doc.documentID,
                         petName: name,
+                        size: data[FS.LostPets.size] as? String ?? "",
+                        markings: data[FS.LostPets.markings] as? String ?? "",
+                        coatLength: data[FS.LostPets.coatLength] as? String ?? "",
+                        earType: data[FS.LostPets.earType] as? String ?? "",
+                        tailType: data[FS.LostPets.tailType] as? String ?? "",
                         description: desc,
                         latitude: lat,
                         longitude: lng,
                         timestamp: timestamp,
                         userId: userId,
-                        petGender: data[FS.LostPets.petGender] as? String,
                         primaryColor: data[FS.LostPets.primaryColor] as? String,
-                        secondaryColor: data[FS.LostPets.secondaryColor] as? String,
-                        hasMicrochip: data[FS.LostPets.hasMicrochip] as? String
+                        secondaryColor: data[FS.LostPets.secondaryColor] as? String
                     )
                 } ?? []
                 
@@ -58,7 +61,7 @@ class FirestoreService {
     
     func fetchUserLostPets(userId: String, completion: @escaping (Result<[LostPet], Error>) -> Void) {
         db.collection(FS.LostPets.collection)
-            .whereField(FS.LostPets.userId, isEqualTo: userId)
+            //.whereField(FS.LostPets.userId, isEqualTo: userId)
             .order(by: FS.LostPets.timestamp, descending: true)
             .getDocuments { snapshot, error in
                 if let error = error {
@@ -71,15 +74,18 @@ class FirestoreService {
                     return LostPet(
                         id: doc.documentID,
                         petName: data[FS.LostPets.petName] as? String ?? "",
+                        size: data[FS.LostPets.size] as? String ?? "",
+                        markings: data[FS.LostPets.markings] as? String ?? "",
+                        coatLength: data[FS.LostPets.coatLength] as? String ?? "",
+                        earType: data[FS.LostPets.earType] as? String ?? "",
+                        tailType: data[FS.LostPets.tailType] as? String ?? "",
                         description: data[FS.LostPets.description] as? String ?? "",
                         latitude: data[FS.LostPets.lat] as? Double ?? 0,
                         longitude: data[FS.LostPets.lng] as? Double ?? 0,
                         timestamp: (data[FS.LostPets.timestamp] as? Timestamp)?.dateValue(),
                         userId: data[FS.LostPets.userId] as? String,
-                        petGender: data[FS.LostPets.petGender] as? String,
                         primaryColor: data[FS.LostPets.primaryColor] as? String,
-                        secondaryColor: data[FS.LostPets.secondaryColor] as? String,
-                        hasMicrochip: data[FS.LostPets.hasMicrochip] as? String
+                        secondaryColor: data[FS.LostPets.secondaryColor] as? String
                     )
                 } ?? []
                 
@@ -87,9 +93,11 @@ class FirestoreService {
             }
     }
     
-    func createLostPetReport(petName: String, description: String, latitude: Double, longitude: Double, userId: String, completion: @escaping (Error?) -> Void) {
+    func createLostPetReport(petName: String, size: String, markings: String, coatLength: String, earType: String, tailType: String, description: String, latitude: Double, longitude: Double, userId: String, completion: @escaping (Error?) -> Void) {
         let data: [String: Any] = [
             FS.LostPets.petName: petName,
+            FS.LostPets.size: size,
+            FS.LostPets.markings: markings,
             FS.LostPets.description: description,
             FS.LostPets.lat: latitude,
             FS.LostPets.lng: longitude,

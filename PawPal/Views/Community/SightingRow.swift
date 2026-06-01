@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SightingRow: View {
     
-    let sighting: PetSighting
+    let sighting: PossiblePetSighting
     
     var body: some View {
         

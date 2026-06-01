@@ -58,7 +58,7 @@ struct MainTabView: View {
             }
             
             NavigationStack {
-                LostPetReportView()
+                ReportView()
             }
             .tabItem {
                 Label("Report", systemImage: "plus.circle")
@@ -67,6 +67,7 @@ struct MainTabView: View {
             NavigationStack {
                 SightingsView()
             }
+            
             .tabItem {
                 Label("Sightings", systemImage: "binoculars.fill")
             }

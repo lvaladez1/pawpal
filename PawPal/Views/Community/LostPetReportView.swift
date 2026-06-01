@@ -33,24 +33,22 @@ extension UIApplication {
 }
 
 struct LostPetReportView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+    
     @StateObject private var locationManager = LocationManager()
     @StateObject private var completerDelegateWrapper = CompleterDelegateWrapper()
-    @EnvironmentObject var authVM: AuthViewModel
+    
     @State private var petName = ""
-    @State private var primaryBreed: String = ""
-    @State private var breeds: [String] = []
-    @State private var secondaryBreed = ""
-    @State private var secondaryBreeds: [String] = []
-    @State private var isWearingCollar: String = ""
+    @State private var petSize = ""
+    @State private var petMarkings = ""
+    @State private var petCoatLength = ""
+    @State private var petEarType = ""
+    @State private var petTailType = ""
     @State private var petDescription = ""
-    @State private var petGender = ""
     @State private var petNotes = ""
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
-    @State private var hasMicrochip = ""
-    let petPrimaryColorDropDown: [String] = ["black", "white", "brown"]
-    let petSecondaryColorDropDown: [String] = ["none", "black", "white", "brown"]
-    let hasMicrochipDropdown: [String] = ["No", "Yes", "Unknown"]
+    
     @State private var pinCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @State private var showLocationSuggestions = false
     @State private var cameraPosition: MapCameraPosition = .automatic
@@ -61,6 +59,14 @@ struct LostPetReportView: View {
     @State private var alertMessage: String = ""
     @State private var showAlert: Bool = false
     @State private var isSubmitting: Bool = false
+    
+    private let petPrimaryColorDropDown: [String] = ["Black", "White", "Brown", "Tan", "Black & White", "Gray", "Golden", "Other"]
+    private let petSecondaryColorDropDown: [String] = ["none", "black", "white", "brown"]
+    private let petSizeDropDown: [String] = ["Small", "Medium", "Large"]
+    private let petMarkingsDropDown = ["White chest", "White paws", "Spotted", "Black mask", "Brindle", "Merle", "Other", "Unknown"]
+    private let petCoatDropDown = ["Short", "Medium", "Long"]
+    private let petEarTypeDropDown = ["Erect", "Semi-erect", "Floppy"]
+    private let petTailTypeDropDown = ["Whip tail", "Furry tail", "Curled", "No tail", "Unknown"]
     
     var body: some View {
         ZStack {
@@ -103,94 +109,33 @@ struct LostPetReportView: View {
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        // Primary Breed Input
+                        // MARK: Pet Size Input
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Breed")
-                                .font(.headline)
-
-                            Picker(
-                                selection: $primaryBreed,
-                                label: Text(primaryBreed.isEmpty ? "Select a breed" : primaryBreed.capitalized)
-                            ) {
-                                Text("Select a breed").tag("")
-
-                                ForEach(breeds, id: \.self) { breed in
-                                    Text(breed.capitalized)
-                                        .tag(breed)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(primaryBreed.isEmpty ? .gray : .primary)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.white)
-                            .cornerRadius(12)
-                            .shadow(color: .black.opacity(0.05), radius: 2)
-                        }
-                        
-                        // Secondary Breed Input
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Secondary Breed (optional mix)")
-                                .font(.headline)
-                            
-                            Picker(
-                                selection: $secondaryBreed,
-                                label: Text(secondaryBreed.isEmpty ? "No mix" : secondaryBreed.capitalized)
-                            ) {
-                                Text("No mix").tag("")
-                                
-                                ForEach(breeds, id: \.self) { breed in
-                                    Text(breed.capitalized)
-                                        .tag(breed)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(primaryBreed.isEmpty ? .gray : .primary)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.white)
-                            .cornerRadius(12)
-                            .shadow(color: .black.opacity(0.05), radius: 2)
-                        }
-                        
-                        // Pet Gender Input
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Gender")
+                            Text("Size")
                                 .font(.headline)
                                 .foregroundColor(.primary)
-
-                            HStack(spacing: 12) {
-                                Button(action: {
-                                    petGender = "Male"
-                                }) {
-                                    Text("Male")
-                                        .font(.subheadline)
-                                        .fontWeight(.semibold)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(petGender == "Male" ? Color.theme.babyBlue : Color.white)
-                                        .foregroundColor(petGender == "Male" ? .white : .primary)
-                                        .cornerRadius(12)
-                                        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            
+                            Picker(selection: $petSize) {
+                                Text("Select a size")
+                                    .tag("")
+                                
+                                ForEach(petSizeDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
                                 }
-
-                                Button(action: {
-                                    petGender = "Female"
-                                }) {
-                                    Text("Female")
-                                        .font(.subheadline)
-                                        .fontWeight(.semibold)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(petGender == "Female" ? Color.theme.babyBlue : Color.white)
-                                        .foregroundColor(petGender == "Female" ? .white : .primary)
-                                        .cornerRadius(12)
-                                        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
-                                }
+                            }   label: {
+                                Text(petSize.isEmpty ? "Select a size" : petSize.capitalized)
                             }
+                            .pickerStyle(.menu)
+                            .tint(petSize.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        // Pet Primary Color Input
+                        // MARK: Primary Color Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Primary Color")
                                 .font(.headline)
@@ -216,7 +161,7 @@ struct LostPetReportView: View {
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        // Pet Secondary Color Input
+                        // MARK: Secondary Color Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Secondary Color")
                                 .font(.headline)
@@ -242,25 +187,25 @@ struct LostPetReportView: View {
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        // Pet Has Microchip Input
+                        // MARK: Markings Input
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Microchipped?")
+                            Text("Markings")
                                 .font(.headline)
                                 .foregroundColor(.primary)
                             
-                            Picker(selection: $hasMicrochip) {
-                                Text("Is your pet microchipped?")
+                            Picker(selection: $petMarkings) {
+                                Text("Select markings")
                                     .tag("")
                                 
-                                ForEach(hasMicrochipDropdown, id: \.self) { option in
-                                    Text(option)
-                                        .tag(option)
+                                ForEach(petMarkingsDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
                                 }
                             }   label: {
-                                Text(hasMicrochip.isEmpty ? "Is your pet microchipped?" : hasMicrochip)
+                                Text(petMarkings.isEmpty ? "Select markings" : petMarkings.capitalized)
                             }
                             .pickerStyle(.menu)
-                            .tint(hasMicrochip.isEmpty ? .gray : .primary)
+                            .tint(petMarkings.isEmpty ? .gray : .primary)
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.white)
@@ -268,31 +213,85 @@ struct LostPetReportView: View {
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        //Has Collar Input
+                        // MARK: Coat Input
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Is the pet wearing a collar?")
+                            Text("Coat Length")
                                 .font(.headline)
-
-                            Picker(
-                                selection: $isWearingCollar,
-                                label: Text(isWearingCollar.isEmpty ? "Select Yes or No" : isWearingCollar)
-                            ) {
-                                Text("Select Yes or No").tag("")
-
-                                Text("Yes").tag("Yes")
-                                Text("No").tag("No")
+                                .foregroundColor(.primary)
+                            
+                            Picker(selection: $petCoatLength) {
+                                Text("Select coat length")
+                                    .tag("")
+                                
+                                ForEach(petCoatDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
+                                }
+                            }   label: {
+                                Text(petCoatLength.isEmpty ? "Select coat length" : petCoatLength.capitalized)
                             }
                             .pickerStyle(.menu)
-                            .tint(.gray)
+                            .tint(petCoatLength.isEmpty ? .gray : .primary)
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.white)
                             .cornerRadius(12)
-                            .shadow(color: .black.opacity(0.05), radius: 2)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        // MARK: Ear Type Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Ear Type")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Picker(selection: $petEarType) {
+                                Text("Select ear type")
+                                    .tag("")
+                                
+                                ForEach(petEarTypeDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
+                                }
+                            }   label: {
+                                Text(petEarType.isEmpty ? "Select ear type" : petEarType.capitalized)
+                            }
+                            .pickerStyle(.menu)
+                            .tint(petEarType.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        
+                        // MARK: Tail Type Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Tail Type")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Picker(selection: $petTailType) {
+                                Text("Select tail type")
+                                    .tag("")
+                                
+                                ForEach(petTailTypeDropDown, id: \.self) { color in
+                                    Text(color.capitalized)
+                                        .tag(color)
+                                }
+                            }   label: {
+                                Text(petTailType.isEmpty ? "Select tail type" : petTailType.capitalized)
+                            }
+                            .pickerStyle(.menu)
+                            .tint(petTailType.isEmpty ? .gray : .primary)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
 
-                        // Description Input
-                        // Notes Input
+                        // MARK: Notes Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Notes")
                                 .font(.headline)
@@ -306,7 +305,7 @@ struct LostPetReportView: View {
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
                         
-                        // Location Search
+                        // MARK: Location Search
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Last Seen Location")
                                 .font(.headline)
@@ -361,7 +360,7 @@ struct LostPetReportView: View {
                             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                         }
                         
-                        // Map View
+                        // MARK: Map View
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Image(systemName: "mappin.and.ellipse")
@@ -425,9 +424,6 @@ struct LostPetReportView: View {
                     .padding(.bottom, 30)
                 }
             }
-            .onAppear {
-                fetchBreeds()
-            }
         }
         .navigationTitle("Report Lost Pet")
         .navigationBarTitleDisplayMode(.inline)
@@ -459,14 +455,17 @@ struct LostPetReportView: View {
         
         isSubmitting = true
         
-        // Create Firestore document for the lost pet report collection.
+        // MARK: Firestore document for the lost pet report collection.
         let data: [String: Any] = [
             FS.LostPets.petName: petName,
+            FS.LostPets.size: petSize,
             FS.LostPets.description: petNotes,
-            "petGender": petGender,
             "primaryColor": petPrimaryColor,
             "secondaryColor": petSecondaryColor,
-            "hasMicrochip" : hasMicrochip,
+            FS.LostPets.markings: petMarkings,
+            FS.LostPets.coatLength: petCoatLength,
+            FS.LostPets.earType: petEarType,
+            FS.LostPets.tailType: petTailType,
             FS.LostPets.lat: pinCoordinate.latitude,
             FS.LostPets.lng: pinCoordinate.longitude,
             FS.LostPets.timestamp: FieldValue.serverTimestamp(),
@@ -485,55 +484,18 @@ struct LostPetReportView: View {
                     alertMessage = "Lost pet report submitted successfully."
                     showAlert = true
                     petName = ""
-                    petGender = ""
+                    petSize = ""
                     petPrimaryColor = ""
                     petSecondaryColor = ""
-                    hasMicrochip = ""
+                    petMarkings = ""
+                    petCoatLength = ""
+                    petEarType = ""
+                    petTailType = ""
                     petNotes = ""
                     hasManuallySelectedLocation = false
                 }
             }
         }
-    }
-    
-    func fetchBreeds() {
-        guard let url = URL(string: "https://dog.ceo/api/breeds/list/all") else { return }
-
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error = error {
-                print("Network error:", error)
-                return
-            }
-
-            guard let data = data else {
-                print("No data")
-                return
-            }
-
-            do {
-                let decoded = try JSONDecoder().decode(BreedsResponse.self, from: data)
-
-                var list: [String] = []
-
-                for (breed, subBreeds) in decoded.message {
-                    if subBreeds.isEmpty {
-                        list.append(breed)
-                    } else {
-                        for sub in subBreeds {
-                            list.append("\(sub) \(breed)")
-                        }
-                    }
-                }
-
-                DispatchQueue.main.async {
-                    self.breeds = list.sorted()
-                    print("Loaded breeds:", self.breeds.count)
-                }
-
-            } catch {
-                print("Decode error:", error)
-            }
-        }.resume()
     }
 
     private func setCameraAndPin(to coord: CLLocationCoordinate2D) {

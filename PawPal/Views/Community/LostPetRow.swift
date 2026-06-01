@@ -15,10 +15,8 @@ struct LostPetRow: View {
     
     private var petTags: [String] {
         [
-            pet.petGender,
             pet.primaryColor?.capitalized,
             pet.secondaryColor?.capitalized,
-            pet.hasMicrochip == "Yes" ? "Microchipped" : nil
         ]
         .compactMap { $0 }
         .filter {
