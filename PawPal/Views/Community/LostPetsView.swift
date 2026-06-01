@@ -167,7 +167,7 @@ struct LostPetsView: View {
                         return
                     }
 
-                    self.lostPets = documents.compactMap { doc in
+                    self.lostPets = documents.compactMap { doc -> LostPet? in
                         let data = doc.data()
                         guard
                             let name = data[FS.LostPets.petName] as? String,
@@ -183,19 +183,21 @@ struct LostPetsView: View {
                         let userId = data[FS.LostPets.userId] as? String
 
                         return LostPet(
-                            id: doc.documentID,
-                            petName: name,
-                            description: desc,
-                            latitude: lat,
-                            longitude: lng,
-                            timestamp: timestamp,
-                            userId: userId,
-                            petGender: data[FS.LostPets.petGender] as? String,
-                            primaryColor: data[FS.LostPets.primaryColor] as? String,
-                            secondaryColor: data[FS.LostPets.secondaryColor] as? String,
-                            hasMicrochip: data[FS.LostPets.hasMicrochip] as? String
-
-                        )
+                                id: doc.documentID,
+                                petName: name,
+                                size: data[FS.LostPets.size] as? String ?? "",
+                                markings: data[FS.LostPets.markings] as? String ?? "",
+                                coatLength: data[FS.LostPets.coatLength] as? String ?? "",
+                                earType: data[FS.LostPets.earType] as? String ?? "",
+                                tailType: data[FS.LostPets.tailType] as? String ?? "",
+                                description: desc,
+                                latitude: lat,
+                                longitude: lng,
+                                timestamp: timestamp,
+                                userId: userId,
+                                primaryColor: data[FS.LostPets.primaryColor] as? String,
+                                secondaryColor: data[FS.LostPets.secondaryColor] as? String
+                            )
                     }
                 }
             }

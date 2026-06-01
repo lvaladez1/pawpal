@@ -296,6 +296,11 @@ struct UserProfileView: View {
                     return LostPet(
                         id: doc.documentID,
                         petName: data[FS.LostPets.petName] as? String ?? "",
+                        size: data[FS.LostPets.size] as? String ?? "",
+                        markings: data[FS.LostPets.markings] as? String ?? "",
+                        coatLength: data[FS.LostPets.coatLength] as? String ?? "",
+                        earType: data[FS.LostPets.earType] as? String ?? "",
+                        tailType: data[FS.LostPets.tailType] as? String ?? "",
                         description: data[FS.LostPets.description] as? String ?? "",
                         latitude: data[FS.LostPets.lat] as? Double ?? 0,
                         longitude: data[FS.LostPets.lng] as? Double ?? 0,

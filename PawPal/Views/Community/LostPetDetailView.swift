@@ -104,7 +104,7 @@ struct LostPetDetailView: View {
                     .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
                     .padding(.horizontal, 16)
                     
-                    // Location Card
+                    // MARK: Location Card
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
                             Image(systemName: "mappin.circle.fill")
@@ -160,7 +160,7 @@ struct LostPetDetailView: View {
                             .shadow(color: Color.theme.babyBlue.opacity(0.4), radius: 8, x: 0, y: 4)
                         }
                         // Sighting Button
-                        NavigationLink(destination: AddSightingView(pet: pet)) {
+                        NavigationLink(destination: ReportSightingView()) {
                             HStack {
                                 Image(systemName: "binoculars.fill")
                                 
@@ -277,6 +277,11 @@ struct ShareSheet: UIViewControllerRepresentable {
     LostPetDetailView(pet: LostPet(
         id: "1",
         petName: "Bella",
+        size: "Small",
+        markings: "Spotted",
+        coatLength: "Short",
+        earType: "Floppy",
+        tailType: "Furry tail",
         description: "Last seen near Elm Street.",
         latitude: 38.5449,
         longitude: -121.7405,

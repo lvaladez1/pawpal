@@ -136,7 +136,7 @@ class AuthViewModel: ObservableObject {
                 let previousIds = Set(previousPets.map { $0.id })
                 
                 // Convert Firestore docs into model objects
-                self.lostPets = documents.compactMap { doc in
+                self.lostPets = documents.compactMap { doc -> LostPet? in
                     let data = doc.data()
                     
                     guard
@@ -151,11 +151,16 @@ class AuthViewModel: ObservableObject {
                     return LostPet(
                         id: doc.documentID,
                         petName: name,
+                        size: data[FS.LostPets.size] as? String ?? "",
+                        markings: data[FS.LostPets.markings] as? String ?? "",
+                        coatLength: data[FS.LostPets.coatLength] as? String ?? "",
+                        earType: data[FS.LostPets.earType] as? String ?? "",
+                        tailType: data[FS.LostPets.tailType] as? String ?? "",
                         description: desc,
                         latitude: lat,
                         longitude: lng,
                         timestamp: timestamp,
-                        userId: data["userId"] as? String
+                        userId: data[FS.LostPets.userId] as? String
                     )
                 }
                 

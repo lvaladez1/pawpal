@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PetSighting: Identifiable {
+struct PossiblePetSighting: Identifiable {
 
     let id: String
     let lostPetId: String
