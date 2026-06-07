@@ -29,6 +29,8 @@ struct SightingsView: View {
     @State private var selectedMode = "Map"
     @State private var isLoading = true
     @State private var useLocalLocation = false
+    
+    @State private var petNameSearch = ""
 
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 36.6002, longitude: -121.8947),
@@ -40,9 +42,11 @@ struct SightingsView: View {
 
     // Combines lost pet pins and sighting pins into one annotation list for the map.
     private var mapAnnotations: [PetMapAnnotation] {
-        let lostPetPins = localMissingPets.map { PetMapAnnotation.lostPet($0) }
+        let lostPetPins = filteredMissingPets.map {
+            PetMapAnnotation.lostPet($0)
+        }
 
-        let sightingPins = matchedSightings.enumerated().map { index, match in
+        let sightingPins = filteredMatchedSightings.enumerated().map { index, match in
             PetMapAnnotation.sighting(match, displayOffsetIndex: index + 1)
         }
 
@@ -65,6 +69,8 @@ struct SightingsView: View {
                 .padding(.horizontal)
 
                 locationSearchSection
+                petNameSearchSection
+
 
                 if selectedMode == "Map" {
                     mapSection
@@ -140,6 +146,27 @@ struct SightingsView: View {
             .padding(.horizontal)
         }
     }
+    
+    //Pet Name Search
+    private var petNameSearchSection: some View {
+        TextField("Search by pet name", text: $petNameSearch)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(14)
+            .padding(.horizontal)
+    }
+    
+    //Filtered Pets View (by name)
+    private var filteredMissingPets: [MissingPetReport] {
+        guard !petNameSearch.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return localMissingPets
+        }
+
+        return localMissingPets.filter { pet in
+            pet.petName.localizedCaseInsensitiveContains(petNameSearch)
+        }
+    }
+    
 
     // MARK: Map display
     // displays both lost pets and sightings.
@@ -213,7 +240,7 @@ struct SightingsView: View {
                         .font(.title3)
                         .fontWeight(.bold)
 
-                    Text("\(matchedSightings.count)")
+                    Text("\(filteredMatchedSightings.count)")
                         .font(.caption)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -234,7 +261,7 @@ struct SightingsView: View {
                         .foregroundColor(.gray)
                         .padding(.horizontal)
                 } else {
-                    ForEach(matchedSightings) { match in
+                    ForEach(filteredMatchedSightings) { match in
                         sightingCard(match)
                     }
                 }
@@ -250,7 +277,7 @@ struct SightingsView: View {
                     .font(.title3)
                     .fontWeight(.bold)
 
-                Text("\(localMissingPets.count)")
+                Text("\(filteredMissingPets.count)")
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -261,12 +288,13 @@ struct SightingsView: View {
                 Spacer()
             }
 
-            if localMissingPets.isEmpty && !isLoading {
+            if filteredMissingPets.isEmpty && !isLoading {
                 Text("No missing pets found within 10 miles.")
                     .font(.caption)
                     .foregroundColor(.gray)
             } else {
-                ForEach(localMissingPets) { pet in
+
+                ForEach(filteredMissingPets) { pet in
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
                             Circle()
@@ -294,6 +322,19 @@ struct SightingsView: View {
             }
         }
         .padding(.horizontal)
+    }
+    
+    //Filtered results in List View
+    private var filteredMatchedSightings: [MatchedSighting] {
+        let searchText = petNameSearch.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !searchText.isEmpty else {
+            return matchedSightings
+        }
+
+        return matchedSightings.filter { match in
+            match.missingPet.petName.localizedCaseInsensitiveContains(searchText)
+        }
     }
 
     // MARK: Pin Card Details
@@ -508,6 +549,7 @@ struct SightingsView: View {
             }
         }
     }
+
 
     // MARK: Fetches sightings and lost pets from Firestore.
     private func fetchData() {

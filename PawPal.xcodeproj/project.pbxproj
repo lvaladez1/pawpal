@@ -25,7 +25,6 @@
 		9CD26B9B2E4C01C20004CB4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26B9A2E4C01BC0004CB4D /* LocationManager.swift */; };
 		9CF1E1022EF5A1B000000002 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF1E1012EF5A1B000000001 /* FirestoreService.swift */; };
 		A00A8D302FB0F01800063EF0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A00A8D2F2FB0F01800063EF0 /* .gitignore */; };
-		A04339492FC8856C00734307 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A04339482FC8856C00734307 /* GoogleService-Info.plist */; };
 		A04CC6A32FC62DC9001AFD4F /* SightingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04CC6A22FC62DC2001AFD4F /* SightingsView.swift */; };
 		A04CC6A72FC63120001AFD4F /* PetSighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04CC6A62FC6310A001AFD4F /* PetSighting.swift */; };
 		A04CC6A92FC6314C001AFD4F /* SightingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04CC6A82FC63147001AFD4F /* SightingRow.swift */; };
@@ -52,6 +51,7 @@
 		A2FD3C5B2EE66A5E000DFCEF /* Community.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2FD3C5A2EE66A5E000DFCEF /* Community.storyboard */; };
 		AD66E5702D35B5DC00995985 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD66E56F2D35B5D500995985 /* AuthService.swift */; };
 		B65F378B2FC6A93600D9ED2B /* BreedsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F378A2FC6A93000D9ED2B /* BreedsResponse.swift */; };
+		B65F37912FD604F600D9ED2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B65F37902FD604F600D9ED2B /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,7 +73,6 @@
 		9CD26B9A2E4C01BC0004CB4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		9CF1E1012EF5A1B000000001 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		A00A8D2F2FB0F01800063EF0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		A04339482FC8856C00734307 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A04CC6A22FC62DC2001AFD4F /* SightingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingsView.swift; sourceTree = "<group>"; };
 		A04CC6A62FC6310A001AFD4F /* PetSighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetSighting.swift; sourceTree = "<group>"; };
 		A04CC6A82FC63147001AFD4F /* SightingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingRow.swift; sourceTree = "<group>"; };
@@ -95,6 +94,7 @@
 		A2FD3C5A2EE66A5E000DFCEF /* Community.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Community.storyboard; sourceTree = "<group>"; };
 		AD66E56F2D35B5D500995985 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		B65F378A2FC6A93000D9ED2B /* BreedsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedsResponse.swift; sourceTree = "<group>"; };
+		B65F37902FD604F600D9ED2B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,8 +212,8 @@
 		A22102BB2E2B057A00103E28 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B65F37902FD604F600D9ED2B /* GoogleService-Info.plist */,
 				9BC1BC2A2CBAE7E300F1DD8E /* Assets.xcassets */,
-				A04339482FC8856C00734307 /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -311,7 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2FD3C5B2EE66A5E000DFCEF /* Community.storyboard in Resources */,
-				A04339492FC8856C00734307 /* GoogleService-Info.plist in Resources */,
+				B65F37912FD604F600D9ED2B /* GoogleService-Info.plist in Resources */,
 				9BC1BC2B2CBAE7E300F1DD8E /* Assets.xcassets in Resources */,
 				A00A8D302FB0F01800063EF0 /* .gitignore in Resources */,
 			);
