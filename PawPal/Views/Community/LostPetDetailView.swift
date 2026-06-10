@@ -201,6 +201,15 @@ struct LostPetDetailView: View {
         }
         .navigationTitle("Pet Details")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: EditLostPetView(pet: pet)) {
+                    Text("Edit")
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.theme.babyBlue)
+                }
+            }
+        }
         .alert("Contact Reporter", isPresented: $showContactAlert) {
             Button("OK", role: .cancel) { }
         } message: {
