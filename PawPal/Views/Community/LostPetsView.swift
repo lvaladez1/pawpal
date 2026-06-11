@@ -183,21 +183,21 @@ struct LostPetsView: View {
                         let userId = data[FS.LostPets.userId] as? String
 
                         return LostPet(
-                                id: doc.documentID,
-                                petName: name,
-                                size: data[FS.LostPets.size] as? String ?? "",
-                                markings: data[FS.LostPets.markings] as? String ?? "",
-                                coatLength: data[FS.LostPets.coatLength] as? String ?? "",
-                                earType: data[FS.LostPets.earType] as? String ?? "",
-                                tailType: data[FS.LostPets.tailType] as? String ?? "",
-                                description: desc,
-                                latitude: lat,
-                                longitude: lng,
-                                timestamp: timestamp,
-                                userId: userId,
-                                primaryColor: data[FS.LostPets.primaryColor] as? String,
-                                secondaryColor: data[FS.LostPets.secondaryColor] as? String
-                            )
+                            id: doc.documentID,
+                            petName: name,
+                            size: data["size"] as? String ?? "",
+                            markings: data["markings"] as? String ?? "",
+                            coatLength: data["coatLength"] as? String ?? "",
+                            earType: data["earType"] as? String ?? "",
+                            tailType: data["tailType"] as? String ?? "",
+                            description: desc,
+                            latitude: lat,
+                            longitude: lng,
+                            timestamp: timestamp,
+                            userId: userId,
+                            primaryColor: data["primaryColor"] as? String,
+                            secondaryColor: data["secondaryColor"] as? String
+                        )
                     }
                 }
             }

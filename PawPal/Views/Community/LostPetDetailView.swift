@@ -13,18 +13,35 @@ import MapKit
 
 struct LostPetDetailView: View {
     let pet: LostPet
+    
+    @EnvironmentObject var authVM: AuthViewModel
+    
+    @State private var displayedPet: LostPet
     @State private var showContent = false
     @State private var showContactAlert = false
     @State private var showShareSheet = false
+    
+    init(pet: LostPet) {
+        self.pet = pet
+        _displayedPet = State(initialValue: pet)
+    }
+    
+    private var canEditPet: Bool {
+        guard let currentUserId = authVM.user?.uid else {
+            return false
+        }
+        
+        return displayedPet.userId == currentUserId
+    }
 
     private var region: MKCoordinateRegion? {
-        guard (-90.0...90.0).contains(pet.latitude),
-              (-180.0...180.0).contains(pet.longitude) else {
+        guard (-90.0...90.0).contains(displayedPet.latitude),
+              (-180.0...180.0).contains(displayedPet.longitude) else {
             return nil
         }
 
         return MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: pet.latitude, longitude: pet.longitude),
+            center: CLLocationCoordinate2D(latitude: displayedPet.latitude, longitude: displayedPet.longitude),
             span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         )
     }
@@ -57,11 +74,11 @@ struct LostPetDetailView: View {
                         .opacity(showContent ? 1.0 : 0.0)
                         
                         VStack(spacing: 8) {
-                            Text(pet.petName)
+                            Text(displayedPet.petName)
                                 .font(.system(size: 34, weight: .bold))
                                 .foregroundColor(.primary)
                             
-                            if let date = pet.timestampDate {
+                            if let date = displayedPet.timestampDate {
                                 HStack(spacing: 6) {
                                     Image(systemName: "clock.fill")
                                         .font(.caption)
@@ -81,21 +98,46 @@ struct LostPetDetailView: View {
                     .padding(.top, 20)
                     .padding(.bottom, 10)
                     
-                    // Description Card
+                    // Notes Card
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Image(systemName: "text.alignleft")
                                 .foregroundColor(Color.theme.babyBlue)
-                            Text("Description")
+                            Text("Notes")
                                 .font(.title3)
                                 .fontWeight(.bold)
                         }
                         
-                        Text(pet.description)
+                        Text(displayedPet.description)
                             .font(.body)
                             .foregroundColor(.secondary)
                             .lineSpacing(6)
                             .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
+                    .padding(.horizontal, 16)
+                    
+                    // Pet Details Card
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Image(systemName: "pawprint.fill")
+                                .foregroundColor(Color.theme.babyBlue)
+                            Text("Pet Details")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                        }
+                        
+                        detailRow(label: "Size", value: displayedPet.size)
+                        detailRow(label: "Primary Color", value: displayedPet.primaryColor ?? "")
+                        detailRow(label: "Secondary Color", value: displayedPet.secondaryColor ?? "")
+                        detailRow(label: "Markings", value: displayedPet.markings)
+                        detailRow(label: "Coat Length", value: displayedPet.coatLength)
+                        detailRow(label: "Ear Type", value: displayedPet.earType)
+                        detailRow(label: "Tail Type", value: displayedPet.tailType)
                     }
                     .padding(20)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -116,7 +158,7 @@ struct LostPetDetailView: View {
                         
                         if let region = region {
                             Map(initialPosition: .region(region)) {
-                                Marker(pet.petName, coordinate: CLLocationCoordinate2D(latitude: pet.latitude, longitude: pet.longitude))
+                                Marker(displayedPet.petName, coordinate: CLLocationCoordinate2D(latitude: displayedPet.latitude, longitude: displayedPet.longitude))
                                     .tint(.red)
                             }
                             .frame(height: 280)
@@ -159,6 +201,7 @@ struct LostPetDetailView: View {
                             .cornerRadius(12)
                             .shadow(color: Color.theme.babyBlue.opacity(0.4), radius: 8, x: 0, y: 4)
                         }
+                        
                         // Sighting Button
                         NavigationLink(destination: ReportSightingView()) {
                             HStack {
@@ -174,6 +217,7 @@ struct LostPetDetailView: View {
                             .cornerRadius(12)
                             .shadow(color: Color.theme.babyBlue.opacity(0.4), radius: 8, x: 0, y: 4)
                         }
+                        
                         // Share Report Button
                         Button(action: {
                             showShareSheet = true
@@ -202,11 +246,17 @@ struct LostPetDetailView: View {
         .navigationTitle("Pet Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: EditLostPetView(pet: pet)) {
-                    Text("Edit")
-                        .fontWeight(.semibold)
-                        .foregroundColor(Color.theme.babyBlue)
+            if canEditPet {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(
+                        destination: EditLostPetView(pet: displayedPet) { updatedPet in
+                            displayedPet = updatedPet
+                        }
+                    ) {
+                        Text("Edit")
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.theme.babyBlue)
+                    }
                 }
             }
         }
@@ -225,19 +275,39 @@ struct LostPetDetailView: View {
         }
     }
     
+    private func detailRow(label: String, value: String) -> some View {
+        let trimmedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        return Group {
+            if !trimmedValue.isEmpty {
+                HStack(alignment: .top) {
+                    Text("\(label):")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    Text(trimmedValue)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.trailing)
+                }
+            }
+        }
+    }
+    
     private func generateShareText() -> String {
-        let locationText = "Location: \(pet.latitude), \(pet.longitude)"
-        let timeText = pet.timestampDate.map { "Reported: \(formatted(date: $0))" } ?? ""
+        let locationText = "Location: \(displayedPet.latitude), \(displayedPet.longitude)"
+        let timeText = displayedPet.timestampDate.map { "Reported: \(formatted(date: $0))" } ?? ""
         
         return """
-        🐾 Lost Pet Alert: \(pet.petName)
+        🐾 Lost Pet Alert: \(displayedPet.petName)
         
-        \(pet.description)
+        \(displayedPet.description)
         
         \(locationText)
         \(timeText)
         
-        Please help reunite \(pet.petName) with their family! 🏡
+        Please help reunite \(displayedPet.petName) with their family! 🏡
         
         Shared via PawPal
         """
@@ -294,6 +364,10 @@ struct ShareSheet: UIViewControllerRepresentable {
         description: "Last seen near Elm Street.",
         latitude: 38.5449,
         longitude: -121.7405,
-        timestamp: Date()
+        timestamp: Date(),
+        userId: "preview-user-id",
+        primaryColor: "Brown",
+        secondaryColor: "White"
     ))
+    .environmentObject(AuthViewModel())
 }
