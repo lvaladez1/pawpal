@@ -20,6 +20,7 @@ struct LostPetDetailView: View {
     @State private var showContent = false
     @State private var showContactAlert = false
     @State private var showShareSheet = false
+    @State private var cameraPosition: MapCameraPosition = .automatic
     
     init(pet: LostPet) {
         self.pet = pet
@@ -156,10 +157,16 @@ struct LostPetDetailView: View {
                                 .fontWeight(.bold)
                         }
                         
-                        if let region = region {
-                            Map(initialPosition: .region(region)) {
-                                Marker(displayedPet.petName, coordinate: CLLocationCoordinate2D(latitude: displayedPet.latitude, longitude: displayedPet.longitude))
-                                    .tint(.red)
+                        if isValidCoordinate {
+                            Map(position: $cameraPosition) {
+                                Marker(
+                                    displayedPet.petName,
+                                    coordinate: CLLocationCoordinate2D(
+                                        latitude: displayedPet.latitude,
+                                        longitude: displayedPet.longitude
+                                    )
+                                )
+                                .tint(.red)
                             }
                             .frame(height: 280)
                             .cornerRadius(16)
@@ -251,6 +258,7 @@ struct LostPetDetailView: View {
                     NavigationLink(
                         destination: EditLostPetView(pet: displayedPet) { updatedPet in
                             displayedPet = updatedPet
+                            updateCameraPosition()
                         }
                     ) {
                         Text("Edit")
@@ -269,10 +277,31 @@ struct LostPetDetailView: View {
             ShareSheet(items: [generateShareText()])
         }
         .onAppear {
+            updateCameraPosition()
+            
             withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
                 showContent = true
             }
         }
+    }
+    
+    private var isValidCoordinate: Bool {
+        (-90.0...90.0).contains(displayedPet.latitude) &&
+        (-180.0...180.0).contains(displayedPet.longitude)
+    }
+    
+    private func updateCameraPosition() {
+        guard isValidCoordinate else { return }
+        
+        cameraPosition = .region(
+            MKCoordinateRegion(
+                center: CLLocationCoordinate2D(
+                    latitude: displayedPet.latitude,
+                    longitude: displayedPet.longitude
+                ),
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
+        )
     }
     
     private func detailRow(label: String, value: String) -> some View {
