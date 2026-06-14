@@ -9,6 +9,8 @@
 //
 //
 //  Created by Luis V on 5/19/26.
+//  Contributors:
+//  Mariah Stinson last updated on 6/14/26
 //
 
 import SwiftUI
@@ -18,6 +20,12 @@ import FirebaseFirestore
 import CoreLocation
 
 struct ReportSightingView: View {
+    let relatedPet: LostPet?
+    
+    init(relatedPet: LostPet? = nil) {
+        self.relatedPet = relatedPet
+    }
+    
     @Environment(\.dismiss) private var dismiss
 
     @StateObject private var locationManager = LocationManager()
@@ -141,7 +149,7 @@ struct ReportSightingView: View {
 
     private var headerSection: some View {
         VStack(alignment: .center, spacing: 8) {
-            Text("Help a lost pet get back home.")
+            Text(relatedPet == nil ? "Help a lost pet get back home." : "Report a sighting for \(relatedPet?.petName ?? "this pet").")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
@@ -468,7 +476,7 @@ struct ReportSightingView: View {
 
         // MARK: Firestore Data
         // PawPal can later match this document against active lost pet reports.
-        let data: [String: Any] = [
+        var data: [String: Any] = [
             "latitude": coordinate.latitude,
             "longitude": coordinate.longitude,
             "locationNotes": searchQuery,
@@ -485,9 +493,16 @@ struct ReportSightingView: View {
 
             "notes": notes,
             "createdAt": FieldValue.serverTimestamp(),
-            "status": "unmatched",
-            "source": "general_sighting"
+            "status": relatedPet == nil ? "unmatched" : "potential_match",
+            "source": relatedPet == nil ? "general_sighting" : "lost_pet_detail_sighting"
         ]
+        
+        if let relatedPet {
+            data["relatedLostPetId"] = relatedPet.id
+            data["relatedLostPetName"] = relatedPet.petName
+            data["relatedLostPetOwnerId"] = relatedPet.userId
+            data["matchType"] = "direct_report"
+        }
 
         Firestore.firestore()
             .collection("sightings")
