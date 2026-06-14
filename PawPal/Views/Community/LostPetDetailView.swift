@@ -6,10 +6,21 @@
 //
 //  Contributors:
 //  Luis Valadez last updated on 5/20/26.
+//  Mariah Stinson last updated on 6/14/26
 //
 
 import SwiftUI
 import MapKit
+import FirebaseFirestore
+
+struct LinkedSighting: Identifiable {
+    let id: String
+    let latitude: Double
+    let longitude: Double
+    let notes: String
+    let petCondition: String
+    let createdAt: Date?
+}
 
 struct LostPetDetailView: View {
     let pet: LostPet
@@ -20,6 +31,8 @@ struct LostPetDetailView: View {
     @State private var showContent = false
     @State private var showContactAlert = false
     @State private var showShareSheet = false
+    @State private var linkedSightings: [LinkedSighting] = []
+    @State private var isLoadingSightings = false
     @State private var cameraPosition: MapCameraPosition = .automatic
     
     init(pet: LostPet) {
@@ -191,6 +204,11 @@ struct LostPetDetailView: View {
                     .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
                     .padding(.horizontal, 16)
                     
+                    // Linked Sightings Section
+                    if canEditPet {
+                        linkedSightingsSection
+                    }
+                    
                     // Contact/Action Buttons
                     VStack(spacing: 12) {
                         Button(action: {
@@ -210,7 +228,7 @@ struct LostPetDetailView: View {
                         }
                         
                         // Sighting Button
-                        NavigationLink(destination: ReportSightingView()) {
+                        NavigationLink(destination: ReportSightingView(relatedPet: displayedPet)) {
                             HStack {
                                 Image(systemName: "binoculars.fill")
                                 
@@ -259,6 +277,7 @@ struct LostPetDetailView: View {
                         destination: EditLostPetView(pet: displayedPet) { updatedPet in
                             displayedPet = updatedPet
                             updateCameraPosition()
+                            loadLinkedSightings()
                         }
                     ) {
                         Text("Edit")
@@ -278,12 +297,125 @@ struct LostPetDetailView: View {
         }
         .onAppear {
             updateCameraPosition()
+            loadLinkedSightings()
             
             withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
                 showContent = true
             }
         }
     }
+    
+    // MARK: - Linked Sightings
+    
+    private var linkedSightingsSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Image(systemName: "binoculars.fill")
+                    .foregroundColor(Color.theme.babyBlue)
+
+                Text("Sightings Reported for \(displayedPet.petName)")
+                    .font(.title3)
+                    .fontWeight(.bold)
+            }
+
+            if isLoadingSightings {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                        .tint(Color.theme.babyBlue)
+                    Spacer()
+                }
+                .padding(.vertical, 20)
+            } else if linkedSightings.isEmpty {
+                Text("No linked sightings have been reported for this pet yet.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.vertical, 8)
+            } else {
+                VStack(spacing: 12) {
+                    ForEach(linkedSightings) { sighting in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Potential Match")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+
+                                Spacer()
+
+                                if let createdAt = sighting.createdAt {
+                                    Text(timeAgo(from: createdAt))
+                                        .font(.caption)
+                                        .foregroundColor(Color.theme.babyBlue)
+                                }
+                            }
+
+                            if !sighting.petCondition.isEmpty {
+                                Text("Condition: \(sighting.petCondition)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            if !sighting.notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                Text(sighting.notes)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(3)
+                            }
+
+                            Text("Location: \(sighting.latitude), \(sighting.longitude)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .background(Color.theme.babyBlue.opacity(0.08))
+                        .cornerRadius(14)
+                    }
+                }
+            }
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
+        .padding(.horizontal, 16)
+    }
+    
+    private func loadLinkedSightings() {
+        guard canEditPet else { return }
+
+        isLoadingSightings = true
+
+        Firestore.firestore()
+            .collection("sightings")
+            .whereField("relatedLostPetId", isEqualTo: displayedPet.id)
+            .order(by: "createdAt", descending: true)
+            .getDocuments { snapshot, error in
+                DispatchQueue.main.async {
+                    isLoadingSightings = false
+
+                    if let error {
+                        print("Failed to load linked sightings: \(error.localizedDescription)")
+                        return
+                    }
+
+                    linkedSightings = snapshot?.documents.compactMap { doc in
+                        let data = doc.data()
+
+                        return LinkedSighting(
+                            id: doc.documentID,
+                            latitude: data["latitude"] as? Double ?? 0,
+                            longitude: data["longitude"] as? Double ?? 0,
+                            notes: data["notes"] as? String ?? "",
+                            petCondition: data["petCondition"] as? String ?? "",
+                            createdAt: (data["createdAt"] as? Timestamp)?.dateValue()
+                        )
+                    } ?? []
+                }
+            }
+    }
+    
+    // MARK: - Coordinate Helpers
     
     private var isValidCoordinate: Bool {
         (-90.0...90.0).contains(displayedPet.latitude) &&
