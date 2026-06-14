@@ -3,6 +3,7 @@
 //  PawPal
 //
 //  Created by Juan Zavala  on 8/05/25.
+//  Edited by Mariah Stinson on 6/13/26
 //
 
 import SwiftUI
@@ -10,6 +11,7 @@ import MapKit
 import Firebase
 import CoreLocation
 import FirebaseFirestore
+import PhotosUI
 import UIKit
 
 enum Validators {
@@ -17,10 +19,12 @@ enum Validators {
         let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
         return t.count >= 2 && t.count <= 40
     }
+    
     static func isValidDescription(_ s: String) -> Bool {
         let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
         return t.count >= 10 && t.count <= 500
     }
+    
     static func isValidCoordinate(lat: Double, lon: Double) -> Bool {
         (-90.0...90.0).contains(lat) && (-180.0...180.0).contains(lon)
     }
@@ -49,6 +53,9 @@ struct LostPetReportView: View {
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
     
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedImage: Image?
+    
     @State private var pinCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @State private var showLocationSuggestions = false
     @State private var cameraPosition: MapCameraPosition = .automatic
@@ -70,8 +77,7 @@ struct LostPetReportView: View {
     
     var body: some View {
         ZStack {
-            // Background Color
-            Color.theme.babyBlueLight // Very light baby blue background
+            Color.theme.babyBlueLight
                 .ignoresSafeArea()
             
             ScrollView {
@@ -93,6 +99,9 @@ struct LostPetReportView: View {
                             .multilineTextAlignment(.center)
                     }
                     .padding(.top, 10)
+                    
+                    // Photo Section
+                    photoSection
                     
                     // Form Section
                     VStack(spacing: 20) {
@@ -119,11 +128,11 @@ struct LostPetReportView: View {
                                 Text("Select a size")
                                     .tag("")
                                 
-                                ForEach(petSizeDropDown, id: \.self) { color in
-                                    Text(color.capitalized)
-                                        .tag(color)
+                                ForEach(petSizeDropDown, id: \.self) { size in
+                                    Text(size.capitalized)
+                                        .tag(size)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petSize.isEmpty ? "Select a size" : petSize.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -149,7 +158,7 @@ struct LostPetReportView: View {
                                     Text(color.capitalized)
                                         .tag(color)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petPrimaryColor.isEmpty ? "Select a color" : petPrimaryColor.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -175,7 +184,7 @@ struct LostPetReportView: View {
                                     Text(color.capitalized)
                                         .tag(color)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petSecondaryColor.isEmpty ? "Select a color" : petSecondaryColor.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -197,11 +206,11 @@ struct LostPetReportView: View {
                                 Text("Select markings")
                                     .tag("")
                                 
-                                ForEach(petMarkingsDropDown, id: \.self) { color in
-                                    Text(color.capitalized)
-                                        .tag(color)
+                                ForEach(petMarkingsDropDown, id: \.self) { marking in
+                                    Text(marking.capitalized)
+                                        .tag(marking)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petMarkings.isEmpty ? "Select markings" : petMarkings.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -223,11 +232,11 @@ struct LostPetReportView: View {
                                 Text("Select coat length")
                                     .tag("")
                                 
-                                ForEach(petCoatDropDown, id: \.self) { color in
-                                    Text(color.capitalized)
-                                        .tag(color)
+                                ForEach(petCoatDropDown, id: \.self) { coat in
+                                    Text(coat.capitalized)
+                                        .tag(coat)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petCoatLength.isEmpty ? "Select coat length" : petCoatLength.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -249,11 +258,11 @@ struct LostPetReportView: View {
                                 Text("Select ear type")
                                     .tag("")
                                 
-                                ForEach(petEarTypeDropDown, id: \.self) { color in
-                                    Text(color.capitalized)
-                                        .tag(color)
+                                ForEach(petEarTypeDropDown, id: \.self) { earType in
+                                    Text(earType.capitalized)
+                                        .tag(earType)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petEarType.isEmpty ? "Select ear type" : petEarType.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -275,11 +284,11 @@ struct LostPetReportView: View {
                                 Text("Select tail type")
                                     .tag("")
                                 
-                                ForEach(petTailTypeDropDown, id: \.self) { color in
-                                    Text(color.capitalized)
-                                        .tag(color)
+                                ForEach(petTailTypeDropDown, id: \.self) { tailType in
+                                    Text(tailType.capitalized)
+                                        .tag(tailType)
                                 }
-                            }   label: {
+                            } label: {
                                 Text(petTailType.isEmpty ? "Select tail type" : petTailType.capitalized)
                             }
                             .pickerStyle(.menu)
@@ -290,7 +299,7 @@ struct LostPetReportView: View {
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
                         }
-
+                        
                         // MARK: Notes Input
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Notes")
@@ -339,6 +348,7 @@ struct LostPetReportView: View {
                                         Text(result.title)
                                             .font(.body)
                                             .foregroundColor(.primary)
+                                        
                                         Text(result.subtitle)
                                             .font(.caption)
                                             .foregroundColor(.gray)
@@ -365,6 +375,7 @@ struct LostPetReportView: View {
                             HStack {
                                 Image(systemName: "mappin.and.ellipse")
                                     .foregroundColor(.red)
+                                
                                 Text("Tap map to adjust pin")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
@@ -377,8 +388,8 @@ struct LostPetReportView: View {
                             .cornerRadius(16)
                             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                             .onTapGesture { location in
-                                // Note: SwiftUI Map doesn't support tap-to-place directly
-                                // Users must use the search field to set location
+                                // Note: SwiftUI Map doesn't support tap-to-place directly.
+                                // Users must use the search field to set location.
                             }
                             .onAppear {
                                 if let userLocation = locationManager.location {
@@ -408,6 +419,7 @@ struct LostPetReportView: View {
                                     .tint(.white)
                                     .padding(.trailing, 5)
                             }
+                            
                             Text(isSubmitting ? "Submitting..." : "Submit Report")
                                 .font(.headline)
                                 .fontWeight(.bold)
@@ -436,21 +448,76 @@ struct LostPetReportView: View {
         }
     }
     
+    // MARK: - Photo Section
+    
+    private var photoSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Add a Photo")
+                .font(.headline)
+            
+            Text("A clear photo helps others recognize your pet.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 18)
+                        .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6]))
+                        .foregroundColor(Color.theme.babyBlue.opacity(0.7))
+                        .frame(height: 160)
+                    
+                    if let selectedImage {
+                        selectedImage
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 160)
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                    } else {
+                        VStack(spacing: 8) {
+                            Image(systemName: "camera.fill")
+                                .font(.largeTitle)
+                                .foregroundColor(Color.theme.babyBlue)
+                            
+                            Text("Take Photo or Choose")
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.theme.babyBlue)
+                        }
+                    }
+                }
+            }
+            .onChange(of: selectedPhoto) { newItem in
+                loadSelectedPhoto(newItem)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .padding(.horizontal)
+    }
+    
+    // MARK: - Submit
+    
     private func submitLostPetReport() {
         let lat = pinCoordinate.latitude
         let lon = pinCoordinate.longitude
         
         guard Validators.isValidPetName(petName) else {
             alertMessage = "Please enter a valid pet name (2–40 characters)."
-            showAlert = true; return
+            showAlert = true
+            return
         }
+        
         guard Validators.isValidDescription(petNotes) else {
             alertMessage = "Please enter valid notes (10–500 characters)."
-            showAlert = true; return
+            showAlert = true
+            return
         }
+        
         guard Validators.isValidCoordinate(lat: lat, lon: lon) else {
             alertMessage = "Please select a valid location on the map."
-            showAlert = true; return
+            showAlert = true
+            return
         }
         
         isSubmitting = true
@@ -470,19 +537,21 @@ struct LostPetReportView: View {
             FS.LostPets.lng: pinCoordinate.longitude,
             FS.LostPets.timestamp: FieldValue.serverTimestamp(),
             
-            // Attempt to connect reports with user ID, Also accounts for old reports not having userId attac
+            // Attempt to connect reports with user ID. Also accounts for old reports not having userId attached.
             "userId": authVM.user?.uid ?? ""
         ]
         
         Firestore.firestore().collection(FS.LostPets.collection).addDocument(data: data) { error in
             DispatchQueue.main.async {
                 isSubmitting = false
+                
                 if let error = error {
                     alertMessage = "Failed to submit: \(error.localizedDescription)"
                     showAlert = true
                 } else {
                     alertMessage = "Lost pet report submitted successfully."
                     showAlert = true
+                    
                     petName = ""
                     petSize = ""
                     petPrimaryColor = ""
@@ -492,19 +561,39 @@ struct LostPetReportView: View {
                     petEarType = ""
                     petTailType = ""
                     petNotes = ""
+                    selectedPhoto = nil
+                    selectedImage = nil
                     hasManuallySelectedLocation = false
                 }
             }
         }
     }
-
+    
+    // MARK: - Photo Helper
+    
+    private func loadSelectedPhoto(_ item: PhotosPickerItem?) {
+        Task {
+            guard let item else { return }
+            
+            if let data = try? await item.loadTransferable(type: Data.self),
+               let uiImage = UIImage(data: data) {
+                selectedImage = Image(uiImage: uiImage)
+            }
+        }
+    }
+    
+    // MARK: - Map Helpers
+    
     private func setCameraAndPin(to coord: CLLocationCoordinate2D) {
         pinCoordinate = coord
         cameraPosition = .region(
-            MKCoordinateRegion(center: coord,
-                               span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            MKCoordinateRegion(
+                center: coord,
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
         )
     }
+    
     private func selectSearchCompletion(_ completion: MKLocalSearchCompletion) {
         hasManuallySelectedLocation = true
         showLocationSuggestions = false
