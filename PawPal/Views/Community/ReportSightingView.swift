@@ -34,6 +34,8 @@ struct ReportSightingView: View {
     @State private var tailType = ""
     @State private var petCondition = "Unknown"
     @State private var notes = ""
+    @State private var otherPrimaryColor = ""
+    @State private var otherMarkings = ""
 
     @State private var searchQuery = ""
     @State private var searchCompleter = MKLocalSearchCompleter()
@@ -81,12 +83,22 @@ struct ReportSightingView: View {
                         selection: $primaryColor,
                         options: colorOptions
                     )
+                    
+                    otherTextView(
+                        selection: primaryColor,
+                        text: $otherPrimaryColor,
+                        placeholder: "Enter Primary Color (if other)")
 
                     optionSection(
                         title: "Markings",
                         selection: $markings,
                         options: markingOptions
                     )
+                    
+                    otherTextView(
+                        selection: markings,
+                        text: $otherMarkings,
+                        placeholder: "Enter Markings (if other)")
 
                     optionSection(
                         title: "Coat Length",
@@ -121,6 +133,7 @@ struct ReportSightingView: View {
                 .padding(20)
             }
         }
+        
         .navigationTitle("Report a Sighting")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -521,7 +534,19 @@ struct ReportSightingView: View {
         searchQuery = ""
         selectedCoordinate = nil
     }
-}
+    
+    @ViewBuilder
+    private func otherTextView(
+            selection: String,
+            text: Binding<String>,
+            placeholder: String
+        ) -> some View {
+            if selection == "Other" {
+                TextField(placeholder, text: text)
+                .textFieldStyle(.roundedBorder)
+            }
+        }
+    }
 
 #Preview {
     NavigationStack {
