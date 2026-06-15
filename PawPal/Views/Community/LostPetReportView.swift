@@ -52,6 +52,8 @@ struct LostPetReportView: View {
     @State private var petNotes = ""
     @State private var petPrimaryColor = ""
     @State private var petSecondaryColor = ""
+    @State private var otherPrimaryColor = ""
+    @State private var otherMarkings = ""
     
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
@@ -168,6 +170,12 @@ struct LostPetReportView: View {
                             .background(Color.white)
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            
+                            if petPrimaryColor == "Other" {
+                                TextField("Enter other color", text: $otherPrimaryColor)
+                                    .textFieldStyle(.roundedBorder)
+                                    .padding(.top, 8)
+                            }
                         }
                         
                         // MARK: Secondary Color Input
@@ -220,6 +228,12 @@ struct LostPetReportView: View {
                             .background(Color.white)
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            
+                            if petMarkings == "Other" {
+                                TextField("Enter other markings", text: $otherMarkings)
+                                    .textFieldStyle(.roundedBorder)
+                                    .padding(.top, 8)
+                            }
                         }
                         
                         // MARK: Coat Input
@@ -614,6 +628,7 @@ struct LostPetReportView: View {
             }
         }
     }
+        
 }
 
 #Preview {

@@ -52,7 +52,7 @@
 		A2FD3C5B2EE66A5E000DFCEF /* Community.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2FD3C5A2EE66A5E000DFCEF /* Community.storyboard */; };
 		AD66E5702D35B5DC00995985 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD66E56F2D35B5D500995985 /* AuthService.swift */; };
 		B65F378B2FC6A93600D9ED2B /* BreedsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F378A2FC6A93000D9ED2B /* BreedsResponse.swift */; };
-		B65F37912FD604F600D9ED2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B65F37902FD604F600D9ED2B /* GoogleService-Info.plist */; };
+		B65F37972FDE67D800D9ED2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,7 +96,7 @@
 		A2FD3C5A2EE66A5E000DFCEF /* Community.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Community.storyboard; sourceTree = "<group>"; };
 		AD66E56F2D35B5D500995985 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		B65F378A2FC6A93000D9ED2B /* BreedsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedsResponse.swift; sourceTree = "<group>"; };
-		B65F37902FD604F600D9ED2B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,10 +127,10 @@
 				A04CC6A62FC6310A001AFD4F /* PetSighting.swift */,
 				A04CC6A22FC62DC2001AFD4F /* SightingsView.swift */,
 				A28CBC632EE66F6C00734192 /* LostPetRow.swift */,
+				9C90A8E62E597E920063C4BC /* LostPetDetailView.swift */,
 				A2FD3C5A2EE66A5E000DFCEF /* Community.storyboard */,
 				84C67EE62EDA215300870058 /* UserProfileView.swift */,
 				9C90A8E82E597F5F0063C4BC /* LostPet.swift */,
-				9C90A8E62E597E920063C4BC /* LostPetDetailView.swift */,
 				9C90A8E42E596FB90063C4BC /* LostPetMapView.swift */,
 				9C90A8E22E596F6E0063C4BC /* LostPetsView.swift */,
 				9C9009DE2E4D4FB8005A1D14 /* SearchCompleterDelegate.swift */,
@@ -215,7 +215,7 @@
 		A22102BB2E2B057A00103E28 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B65F37902FD604F600D9ED2B /* GoogleService-Info.plist */,
+				B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */,
 				9BC1BC2A2CBAE7E300F1DD8E /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -314,7 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2FD3C5B2EE66A5E000DFCEF /* Community.storyboard in Resources */,
-				B65F37912FD604F600D9ED2B /* GoogleService-Info.plist in Resources */,
+				B65F37972FDE67D800D9ED2B /* GoogleService-Info.plist in Resources */,
 				9BC1BC2B2CBAE7E300F1DD8E /* Assets.xcassets in Resources */,
 				A00A8D302FB0F01800063EF0 /* .gitignore in Resources */,
 			);
