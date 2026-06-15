@@ -55,6 +55,8 @@ struct LostPetReportView: View {
     @State private var otherPrimaryColor = ""
     @State private var otherMarkings = ""
     
+    @State private var showEarTypeHelp = false
+    
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
     
@@ -268,6 +270,12 @@ struct LostPetReportView: View {
                                 .font(.headline)
                                 .foregroundColor(.primary)
                             
+                            Button {
+                                showEarTypeHelp = true
+                            } label:{
+                                Label("What is this?", systemImage: "questionmark.circle")
+                            }
+                            
                             Picker(selection: $petEarType) {
                                 Text("Select ear type")
                                     .tag("")
@@ -279,6 +287,7 @@ struct LostPetReportView: View {
                             } label: {
                                 Text(petEarType.isEmpty ? "Select ear type" : petEarType.capitalized)
                             }
+                            
                             .pickerStyle(.menu)
                             .tint(petEarType.isEmpty ? .gray : .primary)
                             .padding()
@@ -286,6 +295,9 @@ struct LostPetReportView: View {
                             .background(Color.white)
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        .sheet(isPresented: $showEarTypeHelp){
+                            EarTypeHelpView()
                         }
                         
                         // MARK: Tail Type Input

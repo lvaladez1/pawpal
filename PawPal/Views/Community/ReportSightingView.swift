@@ -44,6 +44,8 @@ struct ReportSightingView: View {
     @State private var notes = ""
     @State private var otherPrimaryColor = ""
     @State private var otherMarkings = ""
+    
+    @State private var showEarTypeHelp = false
 
     @State private var searchQuery = ""
     @State private var searchCompleter = MKLocalSearchCompleter()
@@ -118,7 +120,15 @@ struct ReportSightingView: View {
                         title: "Ear Type",
                         selection: $earType,
                         options: earOptions
-                    )
+                    ) {
+                        Button {
+                            showEarTypeHelp = true
+                        } label: {
+                            Label("What is this?", systemImage: "questionmark.circle")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                        }
+                    }
 
                     optionSection(
                         title: "Tail Type",
@@ -139,6 +149,9 @@ struct ReportSightingView: View {
                     submitButton
                 }
                 .padding(20)
+            }
+            .sheet(isPresented: $showEarTypeHelp) {
+                EarTypeHelpView()
             }
         }
         
@@ -230,10 +243,11 @@ struct ReportSightingView: View {
 
     // MARK: - Options
 
-    private func optionSection(
+    private func optionSection<Content: View>(
         title: String,
         selection: Binding<String>,
-        options: [String]
+        options: [String],
+        @ViewBuilder content: () -> Content = { EmptyView() }
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
@@ -260,6 +274,8 @@ struct ReportSightingView: View {
                     }
                 }
             }
+            
+            content()
         }
         .padding()
         .background(Color.white.opacity(0.85))
