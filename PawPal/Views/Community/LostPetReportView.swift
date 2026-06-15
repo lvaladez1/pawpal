@@ -56,6 +56,7 @@ struct LostPetReportView: View {
     @State private var otherMarkings = ""
     
     @State private var showEarTypeHelp = false
+    @State private var showTailTypeHelp = false
     
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
@@ -306,6 +307,12 @@ struct LostPetReportView: View {
                                 .font(.headline)
                                 .foregroundColor(.primary)
                             
+                            Button {
+                                showTailTypeHelp = true
+                            } label:{
+                                Label("What is this?", systemImage: "questionmark.circle")
+                            }
+                            
                             Picker(selection: $petTailType) {
                                 Text("Select tail type")
                                     .tag("")
@@ -324,6 +331,9 @@ struct LostPetReportView: View {
                             .background(Color.white)
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        .sheet(isPresented: $showTailTypeHelp) {
+                            TailTypeHelpView()
                         }
                         
                         // MARK: Notes Input
