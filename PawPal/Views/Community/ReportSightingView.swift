@@ -46,6 +46,7 @@ struct ReportSightingView: View {
     @State private var otherMarkings = ""
     
     @State private var showEarTypeHelp = false
+    @State private var showTailTypeHelp = false
 
     @State private var searchQuery = ""
     @State private var searchCompleter = MKLocalSearchCompleter()
@@ -134,7 +135,15 @@ struct ReportSightingView: View {
                         title: "Tail Type",
                         selection: $tailType,
                         options: tailOptions
-                    )
+                    ){
+                        Button {
+                            showTailTypeHelp = true
+                        } label: {
+                            Label("What is this?", systemImage: "questionmark.circle")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                        }
+                    }
 
                     optionSection(
                         title: "Pet's Condition",
@@ -152,6 +161,9 @@ struct ReportSightingView: View {
             }
             .sheet(isPresented: $showEarTypeHelp) {
                 EarTypeHelpView()
+            }
+            .sheet(isPresented: $showTailTypeHelp) {
+                TailTypeHelpView()
             }
         }
         
