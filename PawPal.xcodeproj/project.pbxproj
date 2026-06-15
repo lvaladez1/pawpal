@@ -53,6 +53,7 @@
 		AD66E5702D35B5DC00995985 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD66E56F2D35B5D500995985 /* AuthService.swift */; };
 		B65F378B2FC6A93600D9ED2B /* BreedsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F378A2FC6A93000D9ED2B /* BreedsResponse.swift */; };
 		B65F37972FDE67D800D9ED2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */; };
+		B65F37992FDF9E7F00D9ED2B /* EarTypeHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F37982FDF9E7600D9ED2B /* EarTypeHelpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +98,7 @@
 		AD66E56F2D35B5D500995985 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		B65F378A2FC6A93000D9ED2B /* BreedsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedsResponse.swift; sourceTree = "<group>"; };
 		B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B65F37982FDF9E7600D9ED2B /* EarTypeHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarTypeHelpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		9B9720942CFD096400AED15E /* Community */ = {
 			isa = PBXGroup;
 			children = (
+				B65F37982FDF9E7600D9ED2B /* EarTypeHelpView.swift */,
 				686CE5EB2FD92EA00066B9A2 /* EditLostPetView.swift */,
 				686CE5E62FCFE2100066B9A2 /* ReportSightingView.swift */,
 				686CE5E72FCFE2100066B9A2 /* ReportView.swift */,
@@ -352,6 +355,7 @@
 				9C90A8E92E597F650063C4BC /* LostPet.swift in Sources */,
 				9B165F3A2CBB3FF400BC8DB2 /* CommunityView.swift in Sources */,
 				A22102C02E2B0DF100103E28 /* CommunityPost.swift in Sources */,
+				B65F37992FDF9E7F00D9ED2B /* EarTypeHelpView.swift in Sources */,
 				9C90A8E52E596FC90063C4BC /* LostPetMapView.swift in Sources */,
 				9C90A8E32E596F790063C4BC /* LostPetsView.swift in Sources */,
 				A22102A52E271A9C00103E28 /* LoginView.swift in Sources */,
