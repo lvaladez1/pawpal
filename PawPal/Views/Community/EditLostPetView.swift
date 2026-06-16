@@ -42,6 +42,8 @@ struct EditLostPetView: View {
     @State private var isSaving = false
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var showEarTypeHelp = false
+    @State private var showTailTypeHelp = false
     
     private let sizeOptions = ["Small", "Medium", "Large"]
     private let colorOptions = ["Black", "White", "Brown", "Tan", "Black & White", "Gray", "Golden", "Other"]
@@ -114,19 +116,27 @@ struct EditLostPetView: View {
                         options: coatOptions
                     )
                     
-                    editableDropdown(
+                    editableDropdownWithHelp(
                         title: "Ear Type",
                         placeholder: "Select ear type",
                         selection: $earType,
-                        options: earOptions
+                        options: earOptions,
+                        showHelp: $showEarTypeHelp
                     )
+                    .sheet(isPresented: $showEarTypeHelp) {
+                        EarTypeHelpView()
+                    }
                     
-                    editableDropdown(
+                    editableDropdownWithHelp(
                         title: "Tail Type",
                         placeholder: "Select tail type",
                         selection: $tailType,
-                        options: tailOptions
+                        options: tailOptions,
+                        showHelp: $showTailTypeHelp
                     )
+                    .sheet(isPresented: $showTailTypeHelp) {
+                        TailTypeHelpView()
+                    }
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Notes")
@@ -279,6 +289,44 @@ struct EditLostPetView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.headline)
+            
+            Picker(selection: selection) {
+                Text(placeholder)
+                    .tag("")
+                
+                ForEach(options, id: \.self) { option in
+                    Text(option)
+                        .tag(option)
+                }
+            } label: {
+                Text(selection.wrappedValue.isEmpty ? placeholder : selection.wrappedValue)
+            }
+            .pickerStyle(.menu)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.white)
+            .cornerRadius(12)
+        }
+    }
+    
+    private func editableDropdownWithHelp(
+        title: String,
+        placeholder: String,
+        selection: Binding<String>,
+        options: [String],
+        showHelp: Binding<Bool>
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+            
+            Button {
+                showHelp.wrappedValue = true
+            } label: {
+                Label("What is this?", systemImage: "questionmark.circle")
+                    .font(.subheadline)
+                    .foregroundColor(Color.theme.babyBlue)
+            }
             
             Picker(selection: selection) {
                 Text(placeholder)
