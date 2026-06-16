@@ -52,18 +52,18 @@ private struct EarTypeExample: View {
 
     var body: some View {
         HStack(spacing: 14) {
-
             Image(imageName)
                 .resizable()
                 .scaledToFill()
-                .frame(width: 80, height: 80)
+                .frame(width: 78, height: 78)
                 .clipped()
-                .cornerRadius(10)
+                .cornerRadius(12)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .foregroundColor(.primary)
 
                 Text(description)
                     .font(.caption)
@@ -74,7 +74,8 @@ private struct EarTypeExample: View {
             Spacer()
         }
         .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(14)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
     }
 }

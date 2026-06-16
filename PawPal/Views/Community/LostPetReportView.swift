@@ -273,8 +273,16 @@ struct LostPetReportView: View {
                             
                             Button {
                                 showEarTypeHelp = true
-                            } label:{
-                                Label("What is this?", systemImage: "questionmark.circle")
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "questionmark.circle")
+                                        .font(.caption)
+
+                                    Text("What is this?")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                }
+                                .foregroundColor(Color.theme.babyBlue.opacity(0.65))
                             }
                             
                             Picker(selection: $petEarType) {
@@ -309,8 +317,16 @@ struct LostPetReportView: View {
                             
                             Button {
                                 showTailTypeHelp = true
-                            } label:{
-                                Label("What is this?", systemImage: "questionmark.circle")
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "questionmark.circle")
+                                        .font(.caption)
+
+                                    Text("What is this?")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                }
+                                .foregroundColor(Color.theme.babyBlue.opacity(0.65))
                             }
                             
                             Picker(selection: $petTailType) {
