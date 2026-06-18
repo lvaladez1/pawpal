@@ -55,6 +55,8 @@
 		B65F37972FDE67D800D9ED2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */; };
 		B65F37992FDF9E7F00D9ED2B /* EarTypeHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F37982FDF9E7600D9ED2B /* EarTypeHelpView.swift */; };
 		B65F379B2FDFC20100D9ED2B /* TailTypeHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F379A2FDFC1FA00D9ED2B /* TailTypeHelpView.swift */; };
+		B65F379D2FE37CC300D9ED2B /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F379C2FE37CBD00D9ED2B /* NotificationsView.swift */; };
+		B65F379F2FE387AA00D9ED2B /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65F379E2FE387A300D9ED2B /* Notifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +103,8 @@
 		B65F37962FDE67D800D9ED2B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B65F37982FDF9E7600D9ED2B /* EarTypeHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarTypeHelpView.swift; sourceTree = "<group>"; };
 		B65F379A2FDFC1FA00D9ED2B /* TailTypeHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailTypeHelpView.swift; sourceTree = "<group>"; };
+		B65F379C2FE37CBD00D9ED2B /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		B65F379E2FE387A300D9ED2B /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,8 @@
 		9B9720942CFD096400AED15E /* Community */ = {
 			isa = PBXGroup;
 			children = (
+				B65F379E2FE387A300D9ED2B /* Notifications.swift */,
+				B65F379C2FE37CBD00D9ED2B /* NotificationsView.swift */,
 				B65F379A2FDFC1FA00D9ED2B /* TailTypeHelpView.swift */,
 				B65F37982FDF9E7600D9ED2B /* EarTypeHelpView.swift */,
 				686CE5EB2FD92EA00066B9A2 /* EditLostPetView.swift */,
@@ -333,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B65F379F2FE387AA00D9ED2B /* Notifications.swift in Sources */,
 				A22102BF2E2B0D8800103E28 /* CommunityPostRow.swift in Sources */,
 				84C67EE72EDA215300870058 /* UserProfileView.swift in Sources */,
 				B65F378B2FC6A93600D9ED2B /* BreedsResponse.swift in Sources */,
@@ -356,6 +363,7 @@
 				A04CC6A72FC63120001AFD4F /* PetSighting.swift in Sources */,
 				A22102B02E2AF8C600103E28 /* WelcomeView.swift in Sources */,
 				9C90A8E92E597F650063C4BC /* LostPet.swift in Sources */,
+				B65F379D2FE37CC300D9ED2B /* NotificationsView.swift in Sources */,
 				B65F379B2FDFC20100D9ED2B /* TailTypeHelpView.swift in Sources */,
 				9B165F3A2CBB3FF400BC8DB2 /* CommunityView.swift in Sources */,
 				A22102C02E2B0DF100103E28 /* CommunityPost.swift in Sources */,

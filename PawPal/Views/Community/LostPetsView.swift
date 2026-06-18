@@ -133,6 +133,13 @@ struct LostPetsView: View {
                         .fontWeight(.bold)
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: NotificationsView()) {
+                    Image(systemName: "bell")
+                        .foregroundColor(Color.theme.babyBlue)
+                        .font(.headline)
+                }
+            }
         }
         .onAppear(perform: fetchLostPets)
         .searchable(
